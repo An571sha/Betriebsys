@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/animeshSharma/Betriebsys/CpuMechanism/main.c
+stdio.h
+-
+unistd.h
+-
+sys/time.h
+-
+
