@@ -2,44 +2,46 @@
 #include <unistd.h>
 #include <x86intrin.h>
 #include<string.h>
+#include <sys/time.h>
 
 void readFromSourceAndUseGetTimeOfDay();
 void readFromSourceAndUseRtdsc();
 void performZeroByteRead();
 int createSinglePipeAndPrintOutput();
-int createTwoPipesAndConnectWithEachOther();
+int createTwoPipesAndMeasureContextSwitch();
 
 //HOMEWORK: LIMITED DIRECT EXECUTION
 int main(int argc, char **argv) {
    // readFromSourceAndUseGetTimeOfDay();
    // readFromSourceAndUseRtdsc();
    // createSinglePipeAndPrintOutput();
-   createTwoPipesAndConnectWithEachOther();
+    createTwoPipesAndMeasureContextSwitch();
     return 0;
 }
 
 void readFromSourceAndUseGetTimeOfDay() {
-/*    struct timeval timer_start,timer_end;
+   struct timeval start,end;
+   double elapsedTime;
 
     //starting the timer
-    gettimeofday(&timer_start, NULL);
-    // number of seconds elapsed since 1.1.1970
-    printf("start time = %ld microseconds \n", timer_start.tv_sec);
+    //number of seconds elapsed since 1.1.1970
+    gettimeofday(&start, NULL);
 
     performZeroByteRead();
 
     //ending the timer
-    gettimeofday(&timer_end, NULL);
-    printf("end time = %ld microseconds \n", timer_end.tv_sec);
+    gettimeofday(&end, NULL);
 
-    long timeElapsed = (timer_end.tv_sec - timer_start.tv_sec);
-    printf("Time elapsed =  %ld microseconds\n",
-           ((timer_end.tv_sec - timer_start.tv_sec)*1000000L +timer_end.tv_usec) - timer_start.tv_usec
-    );*/
+    // sec to ms
+    elapsedTime = ((double)end.tv_sec - (double)start.tv_sec) * 1000.0;
+    // microsecs to ms
+    elapsedTime += (end.tv_usec - start.tv_usec) / 1000.0;
+
+    printf("time required for context switch  %lf ms \n", elapsedTime);
 }
 
 void performZeroByteRead(){
-    for (int i = 0; i < 1000000; i++) {
+    for (int i = 0; i < 1000; i++) {
         read(0,NULL,0);
     }
 }
@@ -96,7 +98,7 @@ int createSinglePipeAndPrintOutput(){
     return 0;
 }
 
-int createTwoPipesAndConnectWithEachOther(){
+int createTwoPipesAndMeasureContextSwitch(){
 
     int array0ForPipe[2];
     int array1ForPipe[2];
@@ -110,6 +112,10 @@ int createTwoPipesAndConnectWithEachOther(){
     pipe(array0ForPipe);
     pipe(array1ForPipe);
 
+    struct timeval start, end;
+    double elapsedTime;
+
+
     processId = fork();
 
     if (processId < 0)
@@ -119,6 +125,9 @@ int createTwoPipesAndConnectWithEachOther(){
 
         //parent process
     } else if (processId > 0) {
+
+        //get time stamp at this point
+        gettimeofday(&start, NULL);
 
         //close the reading end of the first pipe
         close(array0ForPipe[0]);
@@ -138,14 +147,18 @@ int createTwoPipesAndConnectWithEachOther(){
         //print from the second pipe
         printf("parent prints %s \n", input_str_2);
 
+        // get time stamp after wait and child process are done
+        gettimeofday(&end, NULL);
+
+        // sec to ms
+        elapsedTime = ((double)end.tv_sec - (double)start.tv_sec) * 1000.0;
+        // microsecs to ms
+        elapsedTime += (end.tv_usec - start.tv_usec) / 1000.0;
+
+        printf("time required for context switch  %lf ms \n", elapsedTime);
+
         //child process
     } else {
-
-        //close the writing end of first pipe
-        close(array0ForPipe[1]);
-
-        //write on the writing end of second pipe
-        write(array1ForPipe[1], fixed_str_2, (strlen(fixed_str_2)+1));
 
         //close the reading end of second pipe
         close(array1ForPipe[0]);
@@ -155,6 +168,12 @@ int createTwoPipesAndConnectWithEachOther(){
 
         //print from the first pipe
         printf("child prints %s \n", input_str_1);
+
+        //close the writing end of first pipe
+        close(array0ForPipe[1]);
+
+        //write on the writing end of second pipe
+        write(array1ForPipe[1], fixed_str_2, (strlen(fixed_str_2)+1));
 
     }
 
