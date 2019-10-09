@@ -7,7 +7,7 @@
 #include<string.h>
 
 
-int forkAloneTest ();
+int aufgabeEins();
 int forkAndWaitTest();
 int openAndForkTest();
 int printInSequence();
@@ -21,12 +21,24 @@ int main(int argc, char *argv[]) {
      //openAndForkTest();
      //printInSequence();
      // waitInChild();
-     connectOutputWithPipe();
+    int input;
+    printf( "Enter the values : 1 für Aufgabe1, 2 für Aufgabe 2 usw \n");
+    scanf("%d", &input);
+    if(input == 1){
+        aufgabeEins();
+    } else if (input == 2){
+
+    } else if(input == 3){
+
+    } else if( input ==  4){
+
+    }
+
 }
 
-int forkAloneTest(){
-    printf("Hello, World!(pid:%d)\n",(int) getpid());
+int aufgabeEins(){
     int x = 10;
+    printf("Parent prints %d \n", x);
     int rc = fork();
     if (rc < 0) {
         // fork failed
@@ -34,13 +46,12 @@ int forkAloneTest(){
         exit(1);
     } else if (rc == 0) {
         // child (new process)
-        printf("hello, I am child (pid:%d)\n", (int) getpid());
-        printf("value of x (x:%d)\n", (int) x);
+        x = 50;
+        printf("child process has the value of x (x:%d)\n", (int) x);
     } else {
         // parent goes down this path (main)
-        printf("hello, I am parent of %d (pid:%d)\n",
-               rc, (int) getpid());
-        printf("value of x (x:%d)\n", (int) x);
+        x = 30;
+        printf("parent process has the value of x (x:%d)\n", (int) x);
     }
     return 0;
 } 
@@ -129,141 +140,69 @@ int waitInChild(){
     return 0;
 }
 int connectOutputWithPipe(){
-/*    pid_t child_a, child_b;
-    int pipefd[2];
-    char fixed_str[] = "This will be output to standard out\n";
-    child_a = fork();
+    int array0ForPipe[2];
+    int array1ForPipe[2];
 
-    if(child_a < 0){
-        fprintf(stderr, "fork failed\n");
+    char fixed_str_1[] = "Sharma";
+    char fixed_str_2[] = "Animesh";
+    char input_str_1[15];
+    char input_str_2[15];
 
-        //parent process
-    }  else if (child_a == 0){
+    pid_t processId;
+    pipe(array0ForPipe);
+    pipe(array1ForPipe);
 
-        //close the reading end
-        close(pipefd[0]);
-        write(pipefd[1],fixed_str, 36);
-        close(pipefd[1]);
-        child_b = fork();
-
-        if (child_b < 0) {
-            fprintf(stderr, "fork failed\n");
-
-            //parent process
-        } else if (child_b > 0) {
-            printf("parent of %d (pid:%d)\n",(int) getpid());
+    struct timeval start, end;
+    double elapsedTime;
 
 
-            //child process
-        } else if (child_b == 0) {
-            read(pipefd[0],fixed_str,36);
-            printf("The String from pipe %s \n",fixed_str);
-            close(pipefd[0]);
+    processId = fork();
 
-        }
-    } else if (child_a > 0) {
-        printf("parent of %d (pid:%d)\n",(int) getpid());
-
-        //child process
-    }
-    return 0;*/
-
-/*    if (child_a == 0) {
-        *//* Child A code *//*
-        close(pipefd[0]);          *//* Close unused read end *//*
-        write(pipefd[1], "This will be output to standard out\n", 36);
-        close(pipefd[1]);
-
-    } else {
-        child_b = fork();
-
-        if (child_b == 0) {
-            close(pipefd[1]);          *//* Close unused write end *//*
-            while (read(pipefd[0], &buf, 1) > 0)
-                write(STDOUT_FILENO, &buf, 1);
-            write(STDOUT_FILENO, "\n", 1);
-            close(pipefd[0]);
-
-        } else {
-            *//* Parent Code *//*
-        }
-    }*/
-    int fd1[2];  // Used to store two ends of first pipe
-    int fd2[2];  // Used to store two ends of second pipe
-
-    char fixed_str[] = "Sharma";
-    char input_str[100];
-    pid_t p;
-
-    if (pipe(fd1)==-1)
-    {
-        fprintf(stderr, "Pipe Failed" );
-        return 1;
-    }
-    if (pipe(fd2)==-1)
-    {
-        fprintf(stderr, "Pipe Failed" );
-        return 1;
-    }
-
-    scanf("%s", input_str);
-    p = fork();
-
-    if (p < 0)
+    if (processId < 0)
     {
         fprintf(stderr, "fork Failed" );
         return 1;
-    }
 
-        // Parent process
-    else if (p > 0)
-    {
-        char concat_str[100];
+        //parent process
+    } else if (processId > 0) {
 
-        close(fd1[0]);  // Close reading end of first pipe
+        //close the reading end of the first pipe
+        close(array0ForPipe[0]);
 
-        // Write input string and close writing end of first
-        // pipe.
-        write(fd1[1], input_str, strlen(input_str)+1);
-        close(fd1[1]);
+        //write on the writing end of first pipe
+        write(array0ForPipe[1], fixed_str_1, (strlen(fixed_str_1)+1));
 
-        // Wait for child to send a string
+        //close the write of second pipe
+        close(array1ForPipe[1]);
+
+        //wait for child process to write on array1ForPipe
         wait(NULL);
 
-        close(fd2[1]); // Close writing end of second pipe
+        //read from the reading end of second pipe
+        read(array1ForPipe[0],input_str_2, sizeof(input_str_2));
 
-        // Read string from child, print it and close
-        // reading end.
-        read(fd2[0], concat_str, 100);
-        printf("Concatenated string %s\n", concat_str);
-        close(fd2[0]);
+        //print from the second pipe
+        printf("parent prints %s \n", input_str_2);
+
+        //child process
+    } else {
+
+        //close the reading end of second pipe
+        close(array1ForPipe[0]);
+
+        //read from the reading end of first pipe
+        read(array0ForPipe[0],input_str_1, sizeof(input_str_1));
+
+        //print from the first pipe
+        printf("child prints %s \n", input_str_1);
+
+        //close the writing end of first pipe
+        close(array0ForPipe[1]);
+
+        //write on the writing end of second pipe
+        write(array1ForPipe[1], fixed_str_2, (strlen(fixed_str_2)+1));
+
     }
 
-        // child process
-    else
-    {
-        close(fd1[1]);  // Close writing end of first pipe
-
-        // Read a string using first pipe
-        char concat_str[100];
-        read(fd1[0], concat_str, 100);
-
-        // Concatenate a fixed string with it
-        int k = strlen(concat_str);
-        int i;
-        for (i=0; i<strlen(fixed_str); i++)
-            concat_str[k++] = fixed_str[i];
-
-        concat_str[k] = '\0';   // string ends with '\0'
-
-        // Close both reading ends
-        close(fd1[0]);
-        close(fd2[0]);
-
-        // Write concatenated string and close writing end
-        write(fd2[1], concat_str, strlen(concat_str)+1);
-        close(fd2[1]);
-
-        exit(0);
-    }
+    return 0;
 }
