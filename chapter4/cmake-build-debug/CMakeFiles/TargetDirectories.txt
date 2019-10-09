@@ -1,0 +1,3 @@
+/cygdrive/c/00-Studium/bsys/Betriebsys/chapter4/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/cygdrive/c/00-Studium/bsys/Betriebsys/chapter4/cmake-build-debug/CMakeFiles/edit_cache.dir
+/cygdrive/c/00-Studium/bsys/Betriebsys/chapter4/cmake-build-debug/CMakeFiles/chapter4.dir
