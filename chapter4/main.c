@@ -4,24 +4,34 @@
 #include <sys/wait.h>
 #include <string.h>
 #include <fcntl.h>
+#include <x86intrin.h>
+//#include <w32api/lm.h>
+
+#define BILLION 1E9
 
 int main(int argc, char *argv[]) {
 
     int x = 100;
     int input;
-    printf("Enter number between 1 and 5: ");
+    printf("Enter number between 1 and 7: ");
     scanf("%d", &input);
     if (input == 1) {
         aufgabe1(&x);
     }
     if (input == 2) {
-        aufgabe2(argv);
+        aufgabe2();
     }
     if (input == 3) {
         aufgabe3();
     }
+    if (input == 6) {
+        rdtsc();
+    }
+    if (input == 7) {
+        clockRealtime();
+    }
 
-    printf("x = %d ", x);
+    printf("\nx = %d", x);
 
     return 0;
 }
@@ -46,39 +56,67 @@ int main(int argc, char *argv[]) {
         //printf("which process am i %d x = %d \n", (int) getpid(), *ptr);
     }
 
-void aufgabe2 (char *argv) {
+void aufgabe2 () {
     close(STDERR_FILENO);
-    open(".p4.output", O_CREAT | O_WRONLY | O_TRUNC, S_IRWXU);
+    int openResult = open("./text.txt", O_CREAT|O_WRONLY);
+    printf("(result:%d)\n", openResult);
+    printf("hello world (pid:%d\n)", (int)getpid());
     int rc = fork();
     if (rc < 0) {
         fprintf(stderr, "fork failed\n");
         exit(1);
     } else if(rc == 0) {
-        execvp(argv[0], argv);
+        printf("hello, i am child(pid:%d)\n", (int)getpid());
+        printf("(result:%d)\n", openResult);
     } else {
         int rc_wait = wait(NULL);
+        printf("hello i am parent of %d (rc_wait:%d) (pid:%d)\n", rc, rc_wait, (int) getpid());
+        printf("(result:%d)\n", openResult);
     }
     printf("yo");
 }
 void aufgabe3 () {
-        int rc = fork();
-        if (rc < 0) {
-            // fork failed
-            fprintf(stderr, "fork failed\n");
-            exit(1);
-            } else if (rc == 0) {
-            // child: redirect standard output to a file
-            close(STDOUT_FILENO);
-            open("./p4.output", O_CREAT|O_WRONLY|O_TRUNC, S_IRWXU);
-            // now exec "wc"...
-            char *myargs[3];
-            myargs[0] = strdup("wc"); // program: wc (word count)
-            myargs[1] = strdup("p4.c"); // arg: file to count
-            myargs[2] = NULL; // mark end of array
-            execvp(myargs[0], myargs); // runs word count
-            } else {
-            // parent goes down this path (main)
-            int rc_wait = wait(NULL);
-            }
-
+    char * ls_args[] = {"dir", NULL};
+    //execute the program
+    execv(   ls_args[0],     ls_args);
+    //only get here on error
+    perror("execv");
+    return;
+    
+}
+void zeroByteRead () {
+    for (int i = 0; i < 1000; ++i) {
+        read(0, NULL, 0);
+    }
+}
+void rdtsc () {
+    unsigned long startTime, stopTime, diffTime;
+    startTime = _rdtsc();
+    zeroByteRead();
+    stopTime = _rdtsc();
+    diffTime = (stopTime - startTime) / 1000;
+    printf("time: %lu \n", diffTime);
+}
+void clockRealtime () {
+    struct timespec start, stop;
+    double accum;
+    /*
+     * if (clock_gettime( CLOCK_REALTIME, &start) == -1) {
+        perror("clock gettime");
+        exit( EXIT_FAILURE );
+    }
+    system( argv[1]);
+    if ( clock_gettime( CLOCK_REALTIME, &stop) == -1 ) {
+        perror("clock gettime");
+        exit( EXIT_FAILURE );
+    }
+     */
+    clock_gettime(CLOCK_REALTIME, &start);
+    zeroByteRead();
+    clock_gettime(CLOCK_REALTIME, &stop);
+    accum = ( stop.tv_sec - start.tv_sec )
+            + ( stop.tv_nsec - start.tv_nsec )
+            / BILLION;
+    printf("%lf\n", accum);
+    return;
 }
