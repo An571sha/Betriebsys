@@ -1,8 +1,12 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <x86intrin.h>
-#include<string.h>
+#include <string.h>
 #include <sys/time.h>
+#include <sched.h>
+#include <assert.h>
+#include <stdbool.h>
+#include <stdlib.h>
 
 void readFromSourceAndUseGetTimeOfDay();
 void readFromSourceAndUseRtdsc();
@@ -115,7 +119,7 @@ int createTwoPipesAndMeasureContextSwitch(){
     struct timeval start, end;
     double elapsedTime;
 
-
+    printf("sched_getcpu = %d\n", sch());
     processId = fork();
 
     if (processId < 0)
