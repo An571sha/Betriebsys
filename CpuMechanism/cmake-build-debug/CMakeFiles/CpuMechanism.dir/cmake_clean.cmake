@@ -1,7 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/CpuMechanism.dir/main.c.o"
-  "CpuMechanism.pdb"
   "CpuMechanism"
+  "CpuMechanism.pdb"
 )
 
 # Per-language clean rules from dependency scanning.

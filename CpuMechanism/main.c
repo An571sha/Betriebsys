@@ -13,13 +13,15 @@ void readFromSourceAndUseRtdsc();
 void performZeroByteRead();
 int createSinglePipeAndPrintOutput();
 int createTwoPipesAndMeasureContextSwitch();
+void readAndUseClock_gettime();
 
 //HOMEWORK: LIMITED DIRECT EXECUTION
 int main(int argc, char **argv) {
    // readFromSourceAndUseGetTimeOfDay();
    // readFromSourceAndUseRtdsc();
    // createSinglePipeAndPrintOutput();
-    createTwoPipesAndMeasureContextSwitch();
+  //  createTwoPipesAndMeasureContextSwitch();
+    readAndUseClock_gettime();
     return 0;
 }
 
@@ -41,7 +43,27 @@ void readFromSourceAndUseGetTimeOfDay() {
     // microsecs to ms
     elapsedTime += (end.tv_usec - start.tv_usec) / 1000.0;
 
-    printf("time required for context switch  %lf ms \n", elapsedTime);
+    printf("time required for syscal %lf ms \n", elapsedTime);
+}
+
+void readAndUseClock_gettime(){
+    struct timespec start, end;
+    double elapsedTime;
+
+    //starting the timer
+    clock_gettime(CLOCK_REALTIME, &start);
+
+    performZeroByteRead();
+
+    //ending the timer
+    clock_gettime(CLOCK_REALTIME, &end);
+
+    // sec to ms
+    elapsedTime = ((double)end.tv_sec - (double)start.tv_sec) * 1000.0;
+    // nanosec to ms
+    elapsedTime += ((double)end.tv_nsec - (double)start.tv_nsec) / 1000000.0;
+
+    printf("time required for syscal %lf ms \n", elapsedTime/1000);
 }
 
 void performZeroByteRead(){
@@ -118,8 +140,6 @@ int createTwoPipesAndMeasureContextSwitch(){
 
     struct timeval start, end;
     double elapsedTime;
-
-    printf("sched_getcpu = %d\n", sch());
     processId = fork();
 
     if (processId < 0)

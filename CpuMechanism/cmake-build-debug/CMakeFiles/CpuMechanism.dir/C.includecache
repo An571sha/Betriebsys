@@ -17,4 +17,12 @@ string.h
 -
 sys/time.h
 -
+sched.h
+-
+assert.h
+-
+stdbool.h
+-
+stdlib.h
+-
 

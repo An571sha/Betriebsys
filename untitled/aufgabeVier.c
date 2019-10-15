@@ -11,7 +11,7 @@ int main(int argc, char *argv[]) {
 int aufgabeVier(){
     char* ls_args[] = { "/bin/ls" , "-l", NULL};
     //execute the program
-    execv(ls_args[0], ls_args);
+    execvp(ls_args[0], ls_args);
     //only get here on error
     perror("execv");
     return 0;
