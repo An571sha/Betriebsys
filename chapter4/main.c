@@ -1,3 +1,5 @@
+#define _POSIX_C_SOURCE 199309L
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -9,6 +11,7 @@
 //#include <w32api/lm.h>
 
 #define BILLION 1E9
+
 
 int main(int argc, char *argv[]) {
 
@@ -87,7 +90,11 @@ void aufgabe3 () {
 }
 void zeroByteRead () {
     for (int i = 0; i < 1000; ++i) {
-        read(0, NULL, 0);
+        getpid();
+    }
+}
+void emptyque () {
+    for (int i = 0; i < 1000; ++i) {
     }
 }
 void rdtsc () {
@@ -112,18 +119,39 @@ void clockRealtime () {
         exit( EXIT_FAILURE );
     }
      */
-    clock_gettime(CLOCK_REALTIME, &start);
+
+    clock_gettime(CLOCK_MONOTONIC_RAW, &start);
     zeroByteRead();
-    clock_gettime(CLOCK_REALTIME, &stop);
+    clock_gettime(CLOCK_MONOTONIC_RAW, &stop);
 
-    accum = ( (double)stop.tv_sec - (double)start.tv_sec )
+    long result = stop.tv_nsec;
+    if (start.tv_nsec > stop.tv_nsec) {
+        result += (stop.tv_sec - start.tv_sec) *1000000000;
+    }
+    long result1 = result - start.tv_nsec;
+
+    clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+    emptyque();
+    clock_gettime(CLOCK_MONOTONIC_RAW, &stop);
+
+    result = stop.tv_nsec;
+    if (start.tv_nsec > stop.tv_nsec) {
+        result += (stop.tv_sec - start.tv_sec) *1000000000;
+    }
+    long result2 = result - start.tv_nsec;
+
+    long finalResult = result1 - result2;
+
+
+    /*accum = ( (double)stop.tv_sec - (double)start.tv_sec )
             + ( (double)stop.tv_nsec - (double)start.tv_nsec )
-            / BILLION;
+            / BILLION;*/
 
-    mikro = (stop.tv_sec - start.tv_sec) *1000;
+    /*mikro = (stop.tv_sec - start.tv_sec) *1000;
     mikro += ((double)stop.tv_nsec - (double)start.tv_nsec) /100000;
     mikro = mikro/1000;
     accum = accum/1000;
-    printf("accum = %lf  millsec = %lf\n", accum, mikro);
+     */
+    printf("nanosec = %lf\n", finalResult);
     return;
 }
