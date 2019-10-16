@@ -5,6 +5,7 @@
 #include <string.h>
 #include <fcntl.h>
 #include <x86intrin.h>
+#include <time.h>
 //#include <w32api/lm.h>
 
 #define BILLION 1E9
