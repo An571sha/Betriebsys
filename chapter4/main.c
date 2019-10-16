@@ -100,7 +100,7 @@ void rdtsc () {
 }
 void clockRealtime () {
     struct timespec start, stop;
-    double accum;
+    double accum, mikro;
     /*
      * if (clock_gettime( CLOCK_REALTIME, &start) == -1) {
         perror("clock gettime");
@@ -115,9 +115,15 @@ void clockRealtime () {
     clock_gettime(CLOCK_REALTIME, &start);
     zeroByteRead();
     clock_gettime(CLOCK_REALTIME, &stop);
-    accum = ( stop.tv_sec - start.tv_sec )
-            + ( stop.tv_nsec - start.tv_nsec )
+
+    accum = ( (double)stop.tv_sec - (double)start.tv_sec )
+            + ( (double)stop.tv_nsec - (double)start.tv_nsec )
             / BILLION;
-    printf("%lf\n", accum);
+
+    mikro = (stop.tv_sec - start.tv_sec) *1000;
+    mikro += ((double)stop.tv_nsec - (double)start.tv_nsec) /100000;
+    mikro = mikro/1000;
+    accum = accum/1000;
+    printf("accum = %lf  millsec = %lf\n", accum, mikro);
     return;
 }
