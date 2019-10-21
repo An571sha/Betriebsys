@@ -3,4 +3,4 @@ project(CpuMechanism C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(CpuMechanism main.c)
+add_executable(CpuMechanism test.c)

@@ -6,22 +6,8 @@
 
 #IncludeRegexTransform: 
 
-/Users/animeshSharma/Betriebsys/CpuMechanism/main.c
+/Users/animeshSharma/Betriebsys/CpuMechanism/test.c
 stdio.h
--
-unistd.h
--
-x86intrin.h
--
-string.h
--
-sys/time.h
--
-sched.h
--
-assert.h
--
-stdbool.h
 -
 stdlib.h
 -

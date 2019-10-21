@@ -60,7 +60,9 @@ void readAndUseClock_gettime(){
 
     // sec to ms
     elapsedTime = ((double)end.tv_sec - (double)start.tv_sec) * 1000.0;
+
     // nanosec to ms
+    // add if a case here, otherwise it will fail misreably in face
     elapsedTime += ((double)end.tv_nsec - (double)start.tv_nsec) / 1000000.0;
 
     printf("time required for syscal %lf ms \n", elapsedTime/1000);
