@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <x86intrin.h>
 #include <string.h>
-#include <sys/time.h>
+#include <time.h>
 #include <sched.h>
 #include <assert.h>
 #include <stdbool.h>
@@ -14,6 +14,7 @@ void performZeroByteRead();
 int createSinglePipeAndPrintOutput();
 int createTwoPipesAndMeasureContextSwitch();
 void readAndUseClock_gettime();
+long removeCalculatedOverHeadTime();
 
 //HOMEWORK: LIMITED DIRECT EXECUTION
 int main(int argc, char **argv) {
@@ -48,30 +49,55 @@ void readFromSourceAndUseGetTimeOfDay() {
 
 void readAndUseClock_gettime(){
     struct timespec start, end;
-    double elapsedTime;
+    long elapsedTime;
 
     //starting the timer
-    clock_gettime(CLOCK_REALTIME, &start);
+    clock_gettime(CLOCK_MONOTONIC_RAW, &start);
 
     performZeroByteRead();
 
     //ending the timer
-    clock_gettime(CLOCK_REALTIME, &end);
+    clock_gettime(CLOCK_MONOTONIC_RAW, &end);
 
-    // sec to ms
-    elapsedTime = ((double)end.tv_sec - (double)start.tv_sec) * 1000.0;
+    elapsedTime = end.tv_nsec;
 
-    // nanosec to ms
-    // add if a case here, otherwise it will fail misreably in face
-    elapsedTime += ((double)end.tv_nsec - (double)start.tv_nsec) / 1000000.0;
+    if (start.tv_nsec > end.tv_nsec) {
+        elapsedTime += ((long) end.tv_sec - (long) start.tv_sec) * 1000000000;
+    }
 
-    printf("time required for syscal %lf ms \n", elapsedTime/1000);
+    elapsedTime = (elapsedTime - start.tv_nsec) - removeCalculatedOverHeadTime();
+
+    printf("time required for syscal %ld ns \n", (elapsedTime/1000));
 }
 
 void performZeroByteRead(){
+
     for (int i = 0; i < 1000; i++) {
-        read(0,NULL,0);
+        getpid();
     }
+}
+
+long removeCalculatedOverHeadTime(){
+    struct timespec start, end;
+    long elapsedTime;
+
+    clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+
+    for (int i = 0; i < 1000; i++) {
+
+    }
+
+    clock_gettime(CLOCK_MONOTONIC_RAW, &end);
+
+    elapsedTime = end.tv_nsec;
+
+    if (start.tv_nsec > end.tv_nsec) {
+        elapsedTime += ((long) end.tv_sec - (long) start.tv_sec) * 1000000000;
+    }
+
+    elapsedTime = elapsedTime - start.tv_nsec;
+
+    return elapsedTime;
 }
 
 void readFromSourceAndUseRtdsc(){

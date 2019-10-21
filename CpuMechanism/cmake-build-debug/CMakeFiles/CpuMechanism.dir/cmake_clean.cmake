@@ -1,5 +1,5 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/CpuMechanism.dir/test.c.o"
+  "CMakeFiles/CpuMechanism.dir/main.c.o"
   "CpuMechanism"
   "CpuMechanism.pdb"
 )

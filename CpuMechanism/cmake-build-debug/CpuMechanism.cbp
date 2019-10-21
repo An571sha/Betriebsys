@@ -78,7 +78,7 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/Users/animeshSharma/Betriebsys/CpuMechanism/test.c">
+		<Unit filename="/Users/animeshSharma/Betriebsys/CpuMechanism/main.c">
 			<Option target="CpuMechanism"/>
 		</Unit>
 		<Unit filename="/Users/animeshSharma/Betriebsys/CpuMechanism/CMakeLists.txt">

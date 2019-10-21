@@ -57,27 +57,27 @@ include CMakeFiles/CpuMechanism.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/CpuMechanism.dir/flags.make
 
-CMakeFiles/CpuMechanism.dir/test.c.o: CMakeFiles/CpuMechanism.dir/flags.make
-CMakeFiles/CpuMechanism.dir/test.c.o: ../test.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/animeshSharma/Betriebsys/CpuMechanism/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/CpuMechanism.dir/test.c.o"
-	/Library/Developer/CommandLineTools/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/CpuMechanism.dir/test.c.o   -c /Users/animeshSharma/Betriebsys/CpuMechanism/test.c
+CMakeFiles/CpuMechanism.dir/main.c.o: CMakeFiles/CpuMechanism.dir/flags.make
+CMakeFiles/CpuMechanism.dir/main.c.o: ../main.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/animeshSharma/Betriebsys/CpuMechanism/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/CpuMechanism.dir/main.c.o"
+	/Library/Developer/CommandLineTools/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/CpuMechanism.dir/main.c.o   -c /Users/animeshSharma/Betriebsys/CpuMechanism/main.c
 
-CMakeFiles/CpuMechanism.dir/test.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/CpuMechanism.dir/test.c.i"
-	/Library/Developer/CommandLineTools/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/animeshSharma/Betriebsys/CpuMechanism/test.c > CMakeFiles/CpuMechanism.dir/test.c.i
+CMakeFiles/CpuMechanism.dir/main.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/CpuMechanism.dir/main.c.i"
+	/Library/Developer/CommandLineTools/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/animeshSharma/Betriebsys/CpuMechanism/main.c > CMakeFiles/CpuMechanism.dir/main.c.i
 
-CMakeFiles/CpuMechanism.dir/test.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/CpuMechanism.dir/test.c.s"
-	/Library/Developer/CommandLineTools/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/animeshSharma/Betriebsys/CpuMechanism/test.c -o CMakeFiles/CpuMechanism.dir/test.c.s
+CMakeFiles/CpuMechanism.dir/main.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/CpuMechanism.dir/main.c.s"
+	/Library/Developer/CommandLineTools/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/animeshSharma/Betriebsys/CpuMechanism/main.c -o CMakeFiles/CpuMechanism.dir/main.c.s
 
 # Object files for target CpuMechanism
 CpuMechanism_OBJECTS = \
-"CMakeFiles/CpuMechanism.dir/test.c.o"
+"CMakeFiles/CpuMechanism.dir/main.c.o"
 
 # External object files for target CpuMechanism
 CpuMechanism_EXTERNAL_OBJECTS =
 
-CpuMechanism: CMakeFiles/CpuMechanism.dir/test.c.o
+CpuMechanism: CMakeFiles/CpuMechanism.dir/main.c.o
 CpuMechanism: CMakeFiles/CpuMechanism.dir/build.make
 CpuMechanism: CMakeFiles/CpuMechanism.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/animeshSharma/Betriebsys/CpuMechanism/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C executable CpuMechanism"

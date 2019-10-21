@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/Users/animeshSharma/Betriebsys/CpuMechanism/test.c" "/Users/animeshSharma/Betriebsys/CpuMechanism/cmake-build-debug/CMakeFiles/CpuMechanism.dir/test.c.o"
+  "/Users/animeshSharma/Betriebsys/CpuMechanism/main.c" "/Users/animeshSharma/Betriebsys/CpuMechanism/cmake-build-debug/CMakeFiles/CpuMechanism.dir/main.c.o"
   )
 set(CMAKE_C_COMPILER_ID "AppleClang")
 
