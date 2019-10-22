@@ -7,6 +7,16 @@
 #include <assert.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <sys/types.h>
+#include <sched.h>
+#include <unistd.h>
+#include <time.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <inttypes.h>
+
 
 void readFromSourceAndUseGetTimeOfDay();
 void readFromSourceAndUseRtdsc();
@@ -21,31 +31,12 @@ int main(int argc, char **argv) {
    // readFromSourceAndUseGetTimeOfDay();
    // readFromSourceAndUseRtdsc();
    // createSinglePipeAndPrintOutput();
-  //  createTwoPipesAndMeasureContextSwitch();
-    readAndUseClock_gettime();
+   createTwoPipesAndMeasureContextSwitch();
+  //  readAndUseClock_gettime();
     return 0;
 }
 
-void readFromSourceAndUseGetTimeOfDay() {
-   struct timeval start,end;
-   double elapsedTime;
 
-    //starting the timer
-    //number of seconds elapsed since 1.1.1970
-    gettimeofday(&start, NULL);
-
-    performZeroByteRead();
-
-    //ending the timer
-    gettimeofday(&end, NULL);
-
-    // sec to ms
-    elapsedTime = ((double)end.tv_sec - (double)start.tv_sec) * 1000.0;
-    // microsecs to ms
-    elapsedTime += (end.tv_usec - start.tv_usec) / 1000.0;
-
-    printf("time required for syscal %lf ms \n", elapsedTime);
-}
 
 void readAndUseClock_gettime(){
     struct timespec start, end;
@@ -166,8 +157,8 @@ int createTwoPipesAndMeasureContextSwitch(){
     pipe(array0ForPipe);
     pipe(array1ForPipe);
 
-    struct timeval start, end;
-    double elapsedTime;
+    struct timespec start, end;
+    long elapsedTime;
     processId = fork();
 
     if (processId < 0)
@@ -178,8 +169,14 @@ int createTwoPipesAndMeasureContextSwitch(){
         //parent process
     } else if (processId > 0) {
 
-        //get time stamp at this point
-        gettimeofday(&start, NULL);
+        cpu_set_t mask;
+        CPU_ZERO(&mask);
+        CPU_SET(3, &mask);
+        if (sched_setaffinity(0, sizeof(cpu_set_t), &mask) < 0)
+        {
+            perror("Error: sched_setaffinity\n");
+            exit(EXIT_FAILURE);
+        }
 
         //close the reading end of the first pipe
         close(array0ForPipe[0]);
@@ -190,28 +187,44 @@ int createTwoPipesAndMeasureContextSwitch(){
         //close the write of second pipe
         close(array1ForPipe[1]);
 
+        //get time stamp at this point
+        clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+
         //wait for child process to write on array1ForPipe
         wait(NULL);
+
+        // get time stamp after wait and child process are done
+        clock_gettime(CLOCK_MONOTONIC_RAW, &end);
 
         //read from the reading end of second pipe
         read(array1ForPipe[0],input_str_2, sizeof(input_str_2));
 
         //print from the second pipe
-        printf("parent prints %s \n", input_str_2);
+        //printf("parent prints %s \n", input_str_2);
 
-        // get time stamp after wait and child process are done
-        gettimeofday(&end, NULL);
+        elapsedTime = end.tv_nsec;
 
-        // sec to ms
-        elapsedTime = ((double)end.tv_sec - (double)start.tv_sec) * 1000.0;
-        // microsecs to ms
-        elapsedTime += (end.tv_usec - start.tv_usec) / 1000.0;
+        if (start.tv_nsec > end.tv_nsec) {
+            elapsedTime += ((long) end.tv_sec - (long) start.tv_sec) * 1000000000;
+        }
 
-        printf("time required for context switch  %lf ms \n", elapsedTime);
+        elapsedTime = (elapsedTime - start.tv_nsec);
+
+
+        printf("time required for context switch  %ld ns \n", elapsedTime);
 
         //child process
     } else {
 
+        cpu_set_t mask;
+        CPU_ZERO(&mask);
+        CPU_SET(3, &mask);
+        if (sched_setaffinity(0, sizeof(cpu_set_t), &mask) < 0)
+        {
+            perror("Error: sched_setaffinity\n");
+            exit(EXIT_FAILURE);
+        }
+        
         //close the reading end of second pipe
         close(array1ForPipe[0]);
 
@@ -219,7 +232,7 @@ int createTwoPipesAndMeasureContextSwitch(){
         read(array0ForPipe[0],input_str_1, sizeof(input_str_1));
 
         //print from the first pipe
-        printf("child prints %s \n", input_str_1);
+        //printf("child prints %s \n", input_str_1);
 
         //close the writing end of first pipe
         close(array0ForPipe[1]);
