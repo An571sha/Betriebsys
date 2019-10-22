@@ -169,6 +169,9 @@ int createTwoPipesAndMeasureContextSwitch(){
         //parent process
     } else if (processId > 0) {
 
+        //wait for child process to write on array1ForPipe
+        wait(NULL);
+
         cpu_set_t mask;
         CPU_ZERO(&mask);
         CPU_SET(3, &mask);
@@ -190,14 +193,11 @@ int createTwoPipesAndMeasureContextSwitch(){
         //get time stamp at this point
         clock_gettime(CLOCK_MONOTONIC_RAW, &start);
 
-        //wait for child process to write on array1ForPipe
-        wait(NULL);
+        //read from the reading end of second pipe
+        read(array1ForPipe[0],input_str_2, sizeof(input_str_2));
 
         // get time stamp after wait and child process are done
         clock_gettime(CLOCK_MONOTONIC_RAW, &end);
-
-        //read from the reading end of second pipe
-        read(array1ForPipe[0],input_str_2, sizeof(input_str_2));
 
         //print from the second pipe
         //printf("parent prints %s \n", input_str_2);
@@ -224,7 +224,7 @@ int createTwoPipesAndMeasureContextSwitch(){
             perror("Error: sched_setaffinity\n");
             exit(EXIT_FAILURE);
         }
-        
+
         //close the reading end of second pipe
         close(array1ForPipe[0]);
 

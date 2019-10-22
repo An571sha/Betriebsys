@@ -25,4 +25,22 @@ stdbool.h
 -
 stdlib.h
 -
+sys/types.h
+-
+sched.h
+-
+unistd.h
+-
+time.h
+-
+sys/types.h
+-
+sys/wait.h
+-
+stdio.h
+-
+stdlib.h
+-
+inttypes.h
+-
 
