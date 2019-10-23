@@ -31,7 +31,6 @@ int main(int argc, char **argv) {
 }
 
 int createTwoPipesAndMeasureContextSwitch(){
-
     int array0ForPipe[2];
     int array1ForPipe[2];
 
@@ -53,11 +52,11 @@ int createTwoPipesAndMeasureContextSwitch(){
     {
         fprintf(stderr, "fork Failed" );
         return 1;
-
         //parent process
     } else if (processId > 0) {
+/*
 
-     cpu_set_t mask;
+        cpu_set_t mask;
         CPU_ZERO(&mask);
         CPU_SET(3, &mask);
         if (sched_setaffinity(0, sizeof(cpu_set_t), &mask) < 0)
@@ -65,6 +64,7 @@ int createTwoPipesAndMeasureContextSwitch(){
             perror("Error: sched_setaffinity\n");
             exit(EXIT_FAILURE);
         }
+*/
 
         //close the reading end of the first pipe
         close(array0ForPipe[0]);
@@ -75,24 +75,17 @@ int createTwoPipesAndMeasureContextSwitch(){
         //close the write of second pipe
         close(array1ForPipe[1]);
 
-        //read the time spent in Context Switch from the reading end of second pipe
-        read(array1ForPipe[0], &input_long_2, sizeof(long));
-
-        totalTime = input_long_2;
-
-        printf("time required for context switch child to parent %ld ns \n",totalTime);
-
         //child process
     } else if (processId == 0){
 
-        cpu_set_t mask;
+  /*      cpu_set_t mask;
         CPU_ZERO(&mask);
         CPU_SET(3, &mask);
         if (sched_setaffinity(0, sizeof(cpu_set_t), &mask) < 0)
         {
             perror("Error: sched_setaffinity\n");
             exit(EXIT_FAILURE);
-        }
+        }*/
 
         //close the reading end of second pipe
         close(array1ForPipe[0]);
@@ -108,6 +101,7 @@ int createTwoPipesAndMeasureContextSwitch(){
 
         //close the writing end of first pipe
         close(array0ForPipe[1]);
+        close(array0ForPipe[0]);
 
         elapsedTime2 = end.tv_nsec;
 
@@ -117,10 +111,9 @@ int createTwoPipesAndMeasureContextSwitch(){
 
         elapsedTime2 = (elapsedTime2 - start.tv_nsec);
 
-        printf("time required for context switch parent to child  %ld ns \n",elapsedTime2);
+        printf("time required for context switch %ld ns \n",elapsedTime2);
 
-        //write on the writing end of second pipe
-        write(array1ForPipe[1], &elapsedTime2, sizeof(long));
+        close(array1ForPipe[1]);
 
     }
 
@@ -128,5 +121,4 @@ int createTwoPipesAndMeasureContextSwitch(){
 }
 
 int timeSpentOnReadAndWrite(){
-
 }
