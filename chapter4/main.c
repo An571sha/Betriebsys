@@ -34,11 +34,21 @@ int main(int argc, char *argv[]) {
     if (input == 7) {
         clockRealtime();
     }
+    if (input == 8) {
+        test();
+    }
 
     printf("\nx = %d", x);
 
     return 0;
 }
+    
+    void test() {
+        int *c1 = NULL;
+        int c2;
+
+        c2 = *c1;
+    }
 
     void aufgabe1(int *ptr) {
         printf("parent 1 (pid:%d)\n", (int) getpid());
