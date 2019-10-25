@@ -126,9 +126,11 @@ void clockRealtime () {
 
     long result = stop.tv_nsec;
     if (start.tv_nsec > stop.tv_nsec) {
-        result += (stop.tv_sec - start.tv_sec) *1000000000;
+        result += ((stop.tv_sec - start.tv_sec) *1000000000);
     }
     long result1 = result - start.tv_nsec;
+
+    printf("result = %ld\n", result1);
 
     clock_gettime(CLOCK_MONOTONIC_RAW, &start);
     emptyque();
@@ -136,11 +138,13 @@ void clockRealtime () {
 
     result = stop.tv_nsec;
     if (start.tv_nsec > stop.tv_nsec) {
-        result += (stop.tv_sec - start.tv_sec) *1000000000;
+        result += ((stop.tv_sec - start.tv_sec) *1000000000);
     }
     long result2 = result - start.tv_nsec;
 
     long finalResult = result1 - result2;
+
+    finalResult = finalResult/1000;
 
 
     /*accum = ( (double)stop.tv_sec - (double)start.tv_sec )
@@ -152,6 +156,6 @@ void clockRealtime () {
     mikro = mikro/1000;
     accum = accum/1000;
      */
-    printf("nanosec = %lf\n", finalResult);
+    printf("nanosec = %ld\n", finalResult);
     return;
 }

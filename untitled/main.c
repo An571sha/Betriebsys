@@ -16,12 +16,7 @@ int waitInChild();
 int connectOutputWithPipe();
 
 int main(int argc, char *argv[]) {
-     //forkAndWaitTest();
-     //forkAloneTest();
-     //openAndForkTest();
-     //printInSequence();
-     // waitInChild();
-     connectOutputWithPipe();
+aufgabeVier();
 }
 
 int forkAloneTest(){
