@@ -1,0 +1,1 @@
+/usr/bin/cc -g  -Wl,--enable-auto-import CMakeFiles/chapter14.dir/main.c.o  -o chapter14.exe -Wl,--out-implib,libchapter14.dll.a -Wl,--major-image-version,0,--minor-image-version,0 
