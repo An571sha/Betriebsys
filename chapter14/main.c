@@ -1,8 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 int main() {
-    int *c1 = NULL;
-    //dereferencing it
-    *c1 = 5;
+    int *array;
+
+
+    array = (int *)malloc(10*sizeof(int));
     return 0;
 }
