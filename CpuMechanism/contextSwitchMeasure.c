@@ -9,18 +9,10 @@
 #include <string.h>
 #include <time.h>
 #include <sys/wait.h>
-#include <stdlib.h>
-#include <inttypes.h>
 #include <sched.h>
-#include <assert.h>
-#include <stdbool.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <sched.h>
-#include <unistd.h>
-#include <time.h>
-#include <sys/types.h>
-#include <string.h>
+#define __CHOSEN_CPU 3 // Select a CPU core to tie the parent and child processes in
+#define __BUFFER_SIZE 4 // Used to store data through a pipe sent by the child process
+#define __NUMBER_OF_ITERATIONS 1E4 // The number of (desired) context switches per process (parent and child)
 
 int createTwoPipesAndMeasureContextSwitch();
 int timeSpentOnReadAndWrite();
@@ -31,90 +23,102 @@ int main(int argc, char **argv) {
 }
 
 int createTwoPipesAndMeasureContextSwitch(){
-    int array0ForPipe[2];
-    int array1ForPipe[2];
-
-    char fixed_str_1[] = "";
-    char input_str_1[15];
-    long input_long_2;
-
-    pid_t processId;
-    pipe(array0ForPipe);
-    pipe(array1ForPipe);
-
-    struct timespec start, end;
-    long elapsedTime1;
-    long elapsedTime2;
-    long totalTime;
-    processId = fork();
-
-    if (processId < 0)
+/*    cpu_set_t mask;
+    CPU_ZERO(&mask);
+    CPU_SET(__CHOSEN_CPU, &mask);
+    if (sched_setaffinity(0, sizeof(cpu_set_t), &mask) < 0)
     {
-        fprintf(stderr, "fork Failed" );
-        return 1;
-        //parent process
-    } else if (processId > 0) {
-/*
+        perror("ERROR: sched_setaffinity (main)\n");
+        return EXIT_FAILURE;
+    }*/
 
-        cpu_set_t mask;
-        CPU_ZERO(&mask);
-        CPU_SET(3, &mask);
-        if (sched_setaffinity(0, sizeof(cpu_set_t), &mask) < 0)
-        {
-            perror("Error: sched_setaffinity\n");
-            exit(EXIT_FAILURE);
-        }
-*/
+    // Create 2 pipes in advance for the parent and child processes (IPC)
+    // One for a data exchange and one to exchange the measured time
+    int pipe_data[2] = {0, 0};
+    int pipe_time[2] = {0, 0};
+    long messwerte[1000];
+    long sum = 0;
 
-        //close the reading end of the first pipe
-        close(array0ForPipe[0]);
+    if (pipe(pipe_data) < 0)
+    {
+        perror("ERROR: pipe (data)\n");
+        return EXIT_FAILURE;
+    }
+    if (pipe(pipe_time) < 0)
+    {
+        perror("ERROR: pipe (time)\n");
+        return EXIT_FAILURE;
+    }
 
-        //write something on the writing end of first pipe
-        write(array0ForPipe[1], fixed_str_1, (strlen(fixed_str_1)+1));
 
-        //close the write of second pipe
-        close(array1ForPipe[1]);
+    // Create a child process
+    pid_t pid = fork();
 
-        //child process
-    } else if (processId == 0){
-
+    if (pid < 0)
+    {
+        perror("ERROR: fork\n");
+        return EXIT_FAILURE;
+    }
+    else if (pid == 0) // child
+    {
+        // Make sure this child process is also tied to one core only, i.e., the core that the parent is tied to
   /*      cpu_set_t mask;
         CPU_ZERO(&mask);
-        CPU_SET(3, &mask);
+        CPU_SET(__CHOSEN_CPU, &mask);
         if (sched_setaffinity(0, sizeof(cpu_set_t), &mask) < 0)
         {
-            perror("Error: sched_setaffinity\n");
-            exit(EXIT_FAILURE);
+            perror("ERROR: sched_setaffinity (main)\n");
+            return EXIT_FAILURE;
         }*/
 
-        //close the reading end of second pipe
-        close(array1ForPipe[0]);
+        close(pipe_data[0]); // make it unidirectional (write only)
+        struct timespec time_stop;
 
-        //get time stamp at this point
-        clock_gettime(CLOCK_MONOTONIC_RAW, &start);
-
-        //context switch occurs here as we start read from the reading end of first pipe
-        read(array0ForPipe[0],input_str_1, sizeof(input_str_1));
-
-        // get time stamp after wait and child process are done
-        clock_gettime(CLOCK_MONOTONIC_RAW, &end);
-
-        //close the writing end of first pipe
-        close(array0ForPipe[1]);
-        close(array0ForPipe[0]);
-
-        elapsedTime2 = end.tv_nsec;
-
-        if (start.tv_nsec > end.tv_nsec) {
-            elapsedTime2 += ((long) end.tv_sec - (long) start.tv_sec) * 1000000000;
+        // Make the OS perform a coupe of context switches by accounting for random events, i.e., other OS related activities
+        for (size_t i = 0; i < 1000; ++i)
+        {
+            write(pipe_data[1], "abc", __BUFFER_SIZE); // send something off to the parent through this pipe
         }
 
-        elapsedTime2 = (elapsedTime2 - start.tv_nsec);
 
-        printf("time required for context switch %ld ns \n",elapsedTime2);
+        close(pipe_time[0]); // make it unidirectional (write only)
+        write(pipe_time[1], &time_stop, sizeof(struct timespec));
+        // send something off to the parent through this
 
-        close(array1ForPipe[1]);
+        // Clean up
+        close(pipe_data[1]);
+        close(pipe_time[1]);
+    }
+    else // parent
+    {
+        char buffer[__BUFFER_SIZE] = "";
+        struct timespec time_stop;
+        close(pipe_data[1]); // make it unidirectional (read only)
 
+        // Start time measurement
+        struct timespec time_start;
+
+        // Make the OS perform a couple of context switches by accounting for random events, i.e., other OS related activities
+        for (size_t i = 0; i < 1000; ++i) {
+            clock_gettime(CLOCK_MONOTONIC_RAW, &time_start);
+
+            read(pipe_data[0], buffer,__BUFFER_SIZE); // this is where a context-switch is likely issued by the OS due to the pipe being empty at first, and the parent being blocked
+
+            clock_gettime(CLOCK_MONOTONIC_RAW, &time_stop);
+
+            messwerte[i] = ((time_stop.tv_sec * 1000000000 + time_stop.tv_nsec) - (time_start.tv_sec * 1000000000 + time_start.tv_nsec));
+
+            sum += messwerte[i];
+
+            printf("werte %ld ns\n", messwerte[i]);
+        }
+
+        // Display the result
+            printf("A context switch takes %ld ns\n", sum/(1000));
+
+        // Clean up
+        close(pipe_data[0]);
+        close(pipe_time[0]);
     }
 
     return 0;
