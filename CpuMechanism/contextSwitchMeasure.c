@@ -10,12 +10,10 @@
 #include <time.h>
 #include <sys/wait.h>
 #include <sched.h>
-#define __CHOSEN_CPU 3 // Select a CPU core to tie the parent and child processes in
 #define __BUFFER_SIZE 4 // Used to store data through a pipe sent by the child process
-#define __NUMBER_OF_ITERATIONS 1E4 // The number of (desired) context switches per process (parent and child)
 
+long removeCalculatedOverHeadTime();
 int createTwoPipesAndMeasureContextSwitch();
-int timeSpentOnReadAndWrite();
 
 int main(int argc, char **argv) {
     createTwoPipesAndMeasureContextSwitch();
@@ -37,6 +35,7 @@ int createTwoPipesAndMeasureContextSwitch(){
     int pipe_data[2] = {0, 0};
     int pipe_time[2] = {0, 0};
     long messwerte[1000];
+    long elapsedTime;
     long sum = 0;
 
     if (pipe(pipe_data) < 0)
@@ -106,7 +105,13 @@ int createTwoPipesAndMeasureContextSwitch(){
 
             clock_gettime(CLOCK_MONOTONIC_RAW, &time_stop);
 
-            messwerte[i] = ((time_stop.tv_sec * 1000000000 + time_stop.tv_nsec) - (time_start.tv_sec * 1000000000 + time_start.tv_nsec));
+            messwerte[i] = time_stop.tv_nsec;
+
+            if (time_start.tv_nsec > time_stop.tv_nsec) {
+                messwerte[i] += ((long) time_stop.tv_sec - (long) time_start.tv_sec) * 1000000000;
+            }
+
+            messwerte[i] = (messwerte[i] - time_start.tv_nsec);
 
             sum += messwerte[i];
 
@@ -114,7 +119,7 @@ int createTwoPipesAndMeasureContextSwitch(){
         }
 
         // Display the result
-            printf("A context switch takes %ld ns\n", sum/(1000));
+        printf("A context switch takes %ld ns\n", (sum- removeCalculatedOverHeadTime())/1000);
 
         // Clean up
         close(pipe_data[0]);
@@ -124,5 +129,25 @@ int createTwoPipesAndMeasureContextSwitch(){
     return 0;
 }
 
-int timeSpentOnReadAndWrite(){
+long removeCalculatedOverHeadTime(){
+    struct timespec start, end;
+    long elapsedTime;
+
+    clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+
+    for (int i = 0; i < 1000; i++) {
+
+    }
+
+    clock_gettime(CLOCK_MONOTONIC_RAW, &end);
+
+    elapsedTime = end.tv_nsec;
+
+    if (start.tv_nsec > end.tv_nsec) {
+        elapsedTime += ((long) end.tv_sec - (long) start.tv_sec) * 1000000000;
+    }
+
+    elapsedTime = elapsedTime - start.tv_nsec;
+
+    return elapsedTime;
 }
