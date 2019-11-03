@@ -1,0 +1,27 @@
+1. program -
+
+	#include <stdio.h>
+
+	int main() {
+   	 int *c1 = NULL;
+   	 int c2;
+   	 //dereferencing it
+   	 c2 = *c1;
+    	 return 0;
+	}
+
+  Liefert ein Segmentation Fehler züruck. Dereferencing von einem null pointer.
+
+2. Program received signal SIGSEGV, Segmentation fault.
+	0x0000555555555135 in main () at null.c:7
+	7	    c2 = *c1;
+
+3. Access not within mapped region at address 0x0
+	- Es bedeutet, dass das Code hat ein Pointer, der null ist.
+   
+   Invalid read of size 4
+	- Es bedeutet, dass das Code liest irgendwelche Werte ausserhalb der Memory Address.
+   
+4. Der Program läuft ohne Fehlermeldung aber Valgrind zeigt ein Fehler von Speicher(8 bytes(size of int) lost)
+
+5.

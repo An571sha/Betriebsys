@@ -3,4 +3,4 @@ project(MemoryAPI C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(MemoryAPI null.c)
+add_executable(MemoryAPI arrayWithMalloc.c)
