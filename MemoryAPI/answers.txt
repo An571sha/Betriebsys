@@ -22,6 +22,6 @@
    Invalid read of size 4
 	- Es bedeutet, dass das Code liest irgendwelche Werte ausserhalb der Memory Address.
    
-4. Der Program läuft ohne Fehlermeldung aber Valgrind zeigt ein Fehler von Speicher(8 bytes(size of int) lost)
+4. Der Program läuft ohne Fehlermeldung aber Valgrind zeigt ein Fehler von Speicher(4 bytes in one block lost)
 
 5.
