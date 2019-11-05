@@ -1,27 +1,20 @@
-//
-// Created by Animesh Sharma on 04.11.19.
-//
-// Unix system libraries
+
 #define _GNU_SOURCE
 #include <sched.h>
 #include <unistd.h>
 #include <sys/types.h>
-
-// C standard libraries
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
 
-#define __CHOSEN_CPU 3 // Select a CPU core to tie the parent and child processes in
-#define __BUFFER_SIZE 4 // Used to store data through a pipe sent by the child process
-#define __NUMBER_OF_ITERATIONS 1E4 // The number of (desired) context switches per process (parent and child)
+long removeCalculatedOverHeadTime();
 
 int main()
 {
     // Make sure this parent process is tied to one core only
 /*    cpu_set_t mask;
     CPU_ZERO(&mask);
-    CPU_SET(__CHOSEN_CPU, &mask);
+    CPU_SET(0, &mask);
     if (sched_setaffinity(0, sizeof(cpu_set_t), &mask) < 0)
     {
         perror("ERROR: sched_setaffinity (main)\n");
@@ -32,6 +25,8 @@ int main()
     // One for a data exchange and one to exchange the measured time
     int pipe_data[2] = {0, 0};
     int pipe_time[2] = {0, 0};
+    long elapsedTime = 0;
+    long totalTime = 0;
 
     if (pipe(pipe_data) < 0)
     {
@@ -58,7 +53,7 @@ int main()
         // Make sure this child process is also tied to one core only, i.e., the core that the parent is tied to
 /*        cpu_set_t mask;
         CPU_ZERO(&mask);
-        CPU_SET(__CHOSEN_CPU, &mask);
+        CPU_SET(0, &mask);
         if (sched_setaffinity(0, sizeof(cpu_set_t), &mask) < 0)
         {
             perror("ERROR: sched_setaffinity (main)\n");
@@ -69,9 +64,9 @@ int main()
         struct timespec time_stop;
 
         // Make the OS perform a coupe of context switches by accounting for random events, i.e., other OS related activities
-        for (size_t i = 0; i < __NUMBER_OF_ITERATIONS; ++i)
+        for (size_t i = 0; i < 1000; ++i)
         {
-            write(pipe_data[1], "abc", __BUFFER_SIZE); // send something off to the parent through this pipe
+            write(pipe_data[1], "abc", 4); // send something off to the parent through this pipe
         }
 
         // End time measurement & pipe it through the parent
@@ -85,7 +80,7 @@ int main()
     }
     else // parent
     {
-        char buffer[__BUFFER_SIZE] = "";
+        char buffer[4] = "";
         struct timespec time_stop;
         close(pipe_data[1]); // make it unidirectional (read only)
 
@@ -94,17 +89,24 @@ int main()
         clock_gettime(CLOCK_MONOTONIC_RAW, &time_start);
 
         // Make the OS perform a couple of context switches by accounting for random events, i.e., other OS related activities
-        for (size_t i = 0; i < __NUMBER_OF_ITERATIONS; ++i)
+        for (size_t i = 0; i < 4; ++i)
         {
-            read(pipe_data[0], buffer, __BUFFER_SIZE); // this is where a context-switch is likely issued by the OS due to the pipe being empty at first, and the parent being blocked
+            read(pipe_data[0], buffer, 4);
         }
 
         // Extract the time measurement from the child through this pipe
         read(pipe_time[0], &time_stop, sizeof(struct timespec));
 
+        elapsedTime = time_stop.tv_nsec;
 
-        // Display the result
-        printf("A context switch takes %f ns\n", ((double)((time_stop.tv_sec * 1E9 + time_stop.tv_nsec) - (time_start.tv_sec * 1E9 + time_start.tv_nsec))) / (2 * __NUMBER_OF_ITERATIONS));
+        if (time_start.tv_nsec > time_stop.tv_nsec) {
+            elapsedTime += ((long) time_stop.tv_sec - (long) time_start.tv_sec) * 1000000000;
+        }
+
+        elapsedTime = (elapsedTime - time_start.tv_nsec);
+
+         // Display the result
+         printf("A context switch takes %ld ns\n", (elapsedTime - 2 * removeCalculatedOverHeadTime())/(1000));
 
         // Clean up
         close(pipe_data[0]);
@@ -112,4 +114,27 @@ int main()
     }
 
     return EXIT_SUCCESS;
+}
+
+long removeCalculatedOverHeadTime(){
+    struct timespec start, end;
+    long elapsedTime;
+
+    clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+
+    for (int i = 0; i < 1000; i++) {
+
+    }
+
+    clock_gettime(CLOCK_MONOTONIC_RAW, &end);
+
+    elapsedTime = end.tv_nsec;
+
+    if (start.tv_nsec > end.tv_nsec) {
+        elapsedTime += ((long) end.tv_sec - (long) start.tv_sec) * 1000000000;
+    }
+
+    elapsedTime = elapsedTime - start.tv_nsec;
+
+    return elapsedTime;
 }

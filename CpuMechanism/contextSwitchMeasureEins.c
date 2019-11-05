@@ -93,7 +93,13 @@ int createTwoPipesAndMeasureContextSwitch(){
 
             clock_gettime(CLOCK_MONOTONIC_RAW, &time_stop);
 
-            messwerte[i] = ((time_stop.tv_sec * 1000000000 + time_stop.tv_nsec) - (time_start.tv_sec * 1000000000 + time_start.tv_nsec));
+            messwerte[i] = time_stop.tv_nsec;
+
+            if (time_start.tv_nsec > time_stop.tv_nsec) {
+                messwerte[i] += ((long) time_stop.tv_sec - (long) time_start.tv_sec) * 1000000000;
+            }
+
+            messwerte[i] = (messwerte[i] - time_start.tv_nsec);
 
             sum += messwerte[i];
 
@@ -101,7 +107,7 @@ int createTwoPipesAndMeasureContextSwitch(){
         }
 
         // Display the result
-        printf("A context switch takes %ld ns\n", sum/(1000));
+        printf("A context switch takes %ld ns\n", (sum  - 2 * removeCalculatedOverHeadTime()) /(1000));
 
         // Clean up
         close(pipe_data[0]);
