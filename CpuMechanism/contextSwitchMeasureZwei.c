@@ -106,7 +106,7 @@ int main()
         elapsedTime = (elapsedTime - time_start.tv_nsec);
 
          // Display the result
-         printf("A context switch takes %ld ns\n", (elapsedTime - 2 * removeCalculatedOverHeadTime())/(1000));
+         printf("A context switch takes %ld ns\n", (elapsedTime - 2 * removeCalculatedOverHeadTime())/1000);
 
         // Clean up
         close(pipe_data[0]);
