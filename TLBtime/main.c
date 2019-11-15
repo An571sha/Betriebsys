@@ -18,6 +18,15 @@ int main() {
 
     int jump = PAGE_SIZE / sizeof(int); //1k int
 
+    cpu_set_t mask;
+    CPU_ZERO(&mask);
+    CPU_SET(0, &mask);
+    if (sched_setaffinity(0, sizeof(cpu_set_t), &mask) < 0)
+    {
+        perror("ERROR: sched_setaffinity (main)\n");
+        return EXIT_FAILURE;
+    }
+
     for (int j = 0; j < size; ++j) {
 
         clock_gettime(CLOCK_MONOTONIC_RAW, &time_start);
