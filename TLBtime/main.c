@@ -21,7 +21,7 @@ int main() {
 
     cpu_set_t mask;
     CPU_ZERO(&mask);
-    CPU_SET(0, &mask);
+    CPU_SET(3, &mask);
     if (sched_setaffinity(0, sizeof(cpu_set_t), &mask) < 0)
     {
         perror("ERROR: sched_setaffinity (main)\n");
