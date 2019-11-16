@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <sched.h>
-#define NUMPAGES 4
+#define NUMPAGES 16
 #define PAGE_SIZE 4096
 int main() {
 
