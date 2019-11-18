@@ -5,14 +5,15 @@
 #include <time.h>
 #include <sched.h>
 #include <unistd.h>
+#include <string.h>
 
 #define NUMPAGES 16
 #define PAGE_SIZE 4096
 
-int main() {
+int main(int argc, char **argv) {
 
     struct timespec time_start, time_stop, start, end;
-    int i, size = 10000;
+    int i, size = 1000000;
     long elapsedTime;
     float *timeArrayStop, *dif;
 
@@ -23,7 +24,10 @@ int main() {
     int *a = (int *) calloc(NUMPAGES * jump, sizeof(int));
     long *timeArrayStart = (long *) calloc(size, sizeof(long));
 
-
+    if (argc > 1)
+    {
+        size = atoi(argv[1]);
+    }
 
     cpu_set_t mask;
     CPU_ZERO(&mask);
@@ -47,32 +51,11 @@ int main() {
         for (i = 0; i < NUMPAGES * jump; i += jump) {
             a[i] += 1;
         }
-        /*elapsedTime = time_stop.tv_nsec;
-
-        if (time_start.tv_nsec > time_stop.tv_nsec) {
-            elapsedTime += ((long) time_stop.tv_sec - (long) time_start.tv_sec) * 1000000000;
-        }
-
-        elapsedTime = elapsedTime - time_start.tv_nsec;
-        printf("%ldns\n", elapsedTime);
-         */
     }
     clock_gettime(CLOCK_MONOTONIC_RAW, &end);
 
     unsigned long diff = (end.tv_sec - start.tv_sec) * 1000000000 + end.tv_nsec - start.tv_nsec - loop;
     unsigned long aver = (diff / NUMPAGES) / size;
     printf("%d,%lu\n", NUMPAGES, aver);
-
-/*
-    elapsedTime = time_stop.tv_nsec;
-
-    if (time_start.tv_nsec > time_stop.tv_nsec) {
-        elapsedTime += ((long) time_stop.tv_sec - (long) time_start.tv_sec) * 1000000000;
-    }
-
-    elapsedTime = elapsedTime - time_start.tv_nsec;
-
-    printf("%ldns\n", elapsedTime);
-*/
     return 0;
 }
