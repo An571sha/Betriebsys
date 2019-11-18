@@ -35,8 +35,8 @@ int main() {
     }
     //loop time
     clock_gettime(CLOCK_MONOTONIC_RAW, &start);
-    for (int j = 0; j < size; j++) {
-        for (i = 0; i < NUMPAGES * jump; i += jump) {
+    for (int k = 0; k < size; k++) {
+        for (int l = 0; l < NUMPAGES * jump; l += jump) {
         }
     }
     clock_gettime(CLOCK_MONOTONIC_RAW, &end);
