@@ -55,7 +55,6 @@ int main() {
         }
 
         elapsedTime = elapsedTime - time_start.tv_nsec;
-        elapsedTime = elapsedTime - loop;
         printf("%ldns\n", elapsedTime);
 
     }
