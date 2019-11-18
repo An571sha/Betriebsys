@@ -12,7 +12,7 @@
 int main() {
 
     struct timespec time_start, time_stop, start, end;
-    int i, *a, size;
+    int i, size;
     long elapsedTime;
     float *timeArrayStart, *timeArrayStop, *dif;
 
@@ -57,7 +57,7 @@ int main() {
 
         elapsedTime = elapsedTime - time_start.tv_nsec;
         elapsedTime = elapsedTime - loop;
-        printf("%ldns\n", elapsedTime);
+        printf("%ldns\n loop: %ld", elapsedTime, loop);
 
     }
 
