@@ -11,7 +11,7 @@
 
 int main() {
 
-    struct timespec time_start, time_stop;
+    struct timespec time_start, time_stop, start, end;
     int i, *a, size;
     long elapsedTime;
     float *timeArrayStart, *timeArrayStop, *dif;
@@ -33,9 +33,17 @@ int main() {
         perror("ERROR: sched_setaffinity (main)\n");
         return EXIT_FAILURE;
     }
+    //loop time
+    clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+    for (int j = 0; j < trials; j++) {
+        for (int i = 0; i < numpages * jump; i += jump) {
+        }
+    }
+    clock_gettime(CLOCK_MONOTONIC_RAW, &end);
+    unsigned long loop = (end.tv_sec - start.tv_sec) * 1000000000 + end.tv_nsec - start.tv_nsec;
 
+    //TLB time
     for (int j = 0; j < size; ++j) {
-
         clock_gettime(CLOCK_MONOTONIC_RAW, &time_start);
         for (i = 0; i < NUMPAGES * jump; i += jump) {
             a[i] += 1;
@@ -48,7 +56,7 @@ int main() {
         }
 
         elapsedTime = elapsedTime - time_start.tv_nsec;
-
+        elapsedTime = elapsedTime - loop;
         printf("%ldns\n", elapsedTime);
 
     }
