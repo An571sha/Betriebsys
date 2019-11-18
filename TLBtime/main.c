@@ -12,17 +12,16 @@
 int main() {
 
     struct timespec time_start, time_stop, start, end;
-    int i, size;
+    int i, size = 10000;
     long elapsedTime;
     float *timeArrayStart, *timeArrayStop, *dif;
 
 
     int jump = PAGE_SIZE / sizeof(int); //1k int
-    size = 10000;
+    int a[NUMPAGES*jump];
     //a = (int *) malloc((NUMPAGES * jump * sizeof(int));
-    int *a = (int *) calloc(NUMPAGES * jump, sizeof(int));
-    timeArrayStart = (long *) malloc(size * sizeof(long));
-    timeArrayStop = (long *) malloc(size * sizeof(long));
+    //int *a = (int *) calloc(NUMPAGES * jump, sizeof(int));
+    //timeArrayStart = (long *) malloc(size * sizeof(long));
 
 
 
