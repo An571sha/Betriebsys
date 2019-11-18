@@ -59,7 +59,7 @@ int main() {
         printf("%ldns\n", elapsedTime);
 
     }
-    printf("loopTime: %ld" loop);
+    printf("loopTime: %ld", loop);
 
 /*
     elapsedTime = time_stop.tv_nsec;
