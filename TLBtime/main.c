@@ -26,6 +26,7 @@ int main(int argc, char **argv) {
     if (argc > 1)
     {
         NUMPAGES = atoi(argv[1]);
+        size = atoi(argv[2]);
     }
 
     cpu_set_t mask;
