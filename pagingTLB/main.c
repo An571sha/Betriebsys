@@ -20,7 +20,8 @@ int main() {
     }*/
 
     //int *a = malloc(PAGE_SIZE);
-    int *a = malloc(10 * sizeof(int));
+    const size_t ARRLEN = 5E6;
+    int *a = calloc(sizeof(int),ARRLEN);
     struct timespec time_start,time_stop;
     int sum = 0 ;
     long messwerte[1000];
@@ -30,9 +31,12 @@ int main() {
 
         clock_gettime(CLOCK_MONOTONIC_RAW, &time_start);
 
+        //If size of a page is 4096 and integer size is 4 bytes
+        //no of entries in a page will be 1024, at 1025 a new page thus miss could occur.
+        //the loop should go through each integer entry in a page times the number of page
         for ( int i=0; i< NUMPAGES * jump; i+=jump) {
-            //printf("value of i %d \n", i);
-            sum+=a[i];
+           // printf("value of i %d \n", i);
+            a[i] += 1;
         }
 
         clock_gettime(CLOCK_MONOTONIC_RAW, &time_stop);
