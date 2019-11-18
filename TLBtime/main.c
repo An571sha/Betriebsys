@@ -20,7 +20,6 @@ int main(int argc, char **argv) {
     int jump = PAGE_SIZE / sizeof(int); //1k int
     //int a[NUMPAGES*jump];
     //a = (int *) malloc((NUMPAGES * jump * sizeof(int));
-    int *a = (int *) calloc(NUMPAGES * jump, sizeof(int));
     long *timeArrayStart = (long *) calloc(size, sizeof(long));
 
     if (argc > 1)
@@ -28,6 +27,8 @@ int main(int argc, char **argv) {
         NUMPAGES = atoi(argv[1]);
         size = atoi(argv[2]);
     }
+
+    int *a = (int *) calloc(NUMPAGES * jump, sizeof(int));
 
     cpu_set_t mask;
     CPU_ZERO(&mask);
