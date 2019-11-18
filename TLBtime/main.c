@@ -7,13 +7,12 @@
 #include <unistd.h>
 #include <string.h>
 
-#define NUMPAGES 16
 #define PAGE_SIZE 4096
 
 int main(int argc, char **argv) {
 
     struct timespec time_start, time_stop, start, end;
-    int i, size = 1000000;
+    int i, size = 1000000, NUMPAGES = 16;
     long elapsedTime;
     float *timeArrayStop, *dif;
 
@@ -26,7 +25,7 @@ int main(int argc, char **argv) {
 
     if (argc > 1)
     {
-        size = atoi(argv[1]);
+        NUMPAGES = atoi(argv[1]);
     }
 
     cpu_set_t mask;
