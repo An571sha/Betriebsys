@@ -25,7 +25,7 @@ int main(int argc, char **argv) {
         //size = atoi(argv[2]);
     }
 
-    int *a = (int *) malloc((numPages * jump * sizeof(int));
+    int *a = (int *) malloc(numPages * jump * sizeof(int));
     //int *a = (int *) calloc(numPages * jump, sizeof(int));
 
     cpu_set_t mask;
