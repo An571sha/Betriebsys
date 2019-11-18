@@ -18,9 +18,9 @@ int main() {
 
 
     int jump = PAGE_SIZE / sizeof(int); //1k int
-    int a[NUMPAGES*jump];
+    //int a[NUMPAGES*jump];
     //a = (int *) malloc((NUMPAGES * jump * sizeof(int));
-    //int *a = (int *) calloc(NUMPAGES * jump, sizeof(int));
+    int *a = (int *) calloc(NUMPAGES * jump, sizeof(int));
     //timeArrayStart = (long *) malloc(size * sizeof(long));
 
 
