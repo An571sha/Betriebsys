@@ -14,14 +14,14 @@ int main() {
     struct timespec time_start, time_stop, start, end;
     int i, size = 10000;
     long elapsedTime;
-    float *timeArrayStart, *timeArrayStop, *dif;
+    float *timeArrayStop, *dif;
 
 
     int jump = PAGE_SIZE / sizeof(int); //1k int
     //int a[NUMPAGES*jump];
     //a = (int *) malloc((NUMPAGES * jump * sizeof(int));
     int *a = (int *) calloc(NUMPAGES * jump, sizeof(int));
-    //timeArrayStart = (long *) malloc(size * sizeof(long));
+    long *timeArrayStart = (long *) calloc(size, sizeof(long));
 
 
 
@@ -42,13 +42,12 @@ int main() {
     unsigned long loop = (end.tv_sec - start.tv_sec) * 1000000000 + end.tv_nsec - start.tv_nsec;
 
     //TLB time
+    clock_gettime(CLOCK_MONOTONIC_RAW, &start);
     for (int j = 0; j < size; ++j) {
-        clock_gettime(CLOCK_MONOTONIC_RAW, &time_start);
         for (i = 0; i < NUMPAGES * jump; i += jump) {
             a[i] += 1;
         }
-        clock_gettime(CLOCK_MONOTONIC_RAW, &time_stop);
-        elapsedTime = time_stop.tv_nsec;
+        /*elapsedTime = time_stop.tv_nsec;
 
         if (time_start.tv_nsec > time_stop.tv_nsec) {
             elapsedTime += ((long) time_stop.tv_sec - (long) time_start.tv_sec) * 1000000000;
@@ -56,9 +55,13 @@ int main() {
 
         elapsedTime = elapsedTime - time_start.tv_nsec;
         printf("%ldns\n", elapsedTime);
-
+         */
     }
-    printf("loopTime: %ld", loop);
+    clock_gettime(CLOCK_MONOTONIC_RAW, &end);
+
+    unsigned long diff = (end.tv_sec - start.tv_sec) * 1000000000 + end.tv_nsec - start.tv_nsec - loop;
+    unsigned long aver = (diff / NUMPAGES) / size;
+    printf("%d,%lu\n", NUMPAGES, aver);
 
 /*
     elapsedTime = time_stop.tv_nsec;
