@@ -5,7 +5,6 @@
 #include <time.h>
 #include <sched.h>
 #include <unistd.h>
-#include <windows.h>
 
 #define NUMPAGES 16
 #define PAGE_SIZE 4096
