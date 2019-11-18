@@ -1,0 +1,22 @@
+#!/bin/bash
+while getopts n:p: option
+do
+case "${option}"
+in
+n) USER=${OPTARG};;
+p) set -f # disable glob
+   IFS=,  # split on space characters
+   array=($OPTARG) ;; # use the split+glob operator
+esac
+done
+
+
+
+echo "Number of arguments: ${#array[@]}"
+for i in "${array[@]}";
+do
+    gcc -o main main.c
+   ./main ${USER} ${i}
+done
+
+
