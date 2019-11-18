@@ -11,16 +11,13 @@
 
 int main(int argc, char **argv) {
 
-    struct timespec time_start, time_stop, start, end;
+    struct timespec start, end;
     int i, size = 1000000, numPages = 16;
     long elapsedTime;
     float *timeArrayStop, *dif;
 
 
     int jump = PAGE_SIZE / sizeof(int); //1k int
-    //int a[numPages*jump];
-    //a = (int *) malloc((numPages * jump * sizeof(int));
-    long *timeArrayStart = (long *) calloc(size, sizeof(long));
 
     if (argc > 1)
     {
@@ -28,7 +25,8 @@ int main(int argc, char **argv) {
         size = atoi(argv[2]);
     }
 
-    int *a = (int *) calloc(numPages * jump, sizeof(int));
+    int *a = (int *) malloc((numPages * jump * sizeof(int));
+    //int *a = (int *) calloc(numPages * jump, sizeof(int));
 
     cpu_set_t mask;
     CPU_ZERO(&mask);
