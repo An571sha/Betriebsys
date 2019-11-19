@@ -17,6 +17,7 @@ for i in "${array[@]}";
 do
     gcc -o main main.c
    ./main ${USER} ${i}
+    echo "${i},$?" >> result.csv
 done
 
 

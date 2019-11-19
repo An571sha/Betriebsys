@@ -2,8 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#define PAGE_SIZE 4096
-#define NUMPAGES 16
 #include <sched.h>
 #include <errno.h>
 #include <limits.h>
@@ -12,7 +10,6 @@
 
 int main(int argc, char * argv[]) {
 
-    /*
     cpu_set_t mask;
     CPU_ZERO(&mask);
     CPU_SET(0, &mask);
@@ -20,10 +17,9 @@ int main(int argc, char * argv[]) {
     {
         perror("ERROR: sched_setaffinity (main)\n");
         return EXIT_FAILURE;
-    }*/
+    }
 
-//    int numberOfPages = atoi(argv[1]);
-//    int numberOfTrails = atoi(argv[2]);
+
 
     //int *a = malloc(PAGE_SIZE);
     const size_t ARRLEN = 5E6;
@@ -64,7 +60,7 @@ int main(int argc, char * argv[]) {
     for (long j=0; j < numberOfTrials; j++) {
 
         //If size of a page is 4096 and integer size is 4 bytes
-        //no of entries in a page will be 1024, at 1025 a new page thus miss could occur.
+        //no of entries in a page will be, at 1025 a new page thus miss could occur.
         //the loop should go through each integer entry in a page times the number of page
         for (long i = 0; i < numberOfPages * jump; i += jump) {
             a[i] += 1;
@@ -82,9 +78,20 @@ int main(int argc, char * argv[]) {
 
     sum = (sum - time_start.tv_nsec);
 
-    printf("werte %ld ns \n", sum/numberOfTrials);
+    printf("werte %ld ns \n", (sum)/(numberOfPages * numberOfTrials));
 
+/*    //write in csv
+    FILE *fptr = fopen("result.csv", "a+");
+    if (fptr == NULL)
+    {
+        printf("Could not open file");
+        return 0;
+    }
+    fprintf(fptr,"%ld,%ld\n",numberOfPages,(sum)/(numberOfPages * numberOfTrials));
+
+    fclose(fptr);
+*/
     free(a);
 
-    return 0;
+    return (sum)/(numberOfPages * numberOfTrials);
 }
