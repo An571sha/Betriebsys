@@ -14,8 +14,6 @@ int main(int argc, char **argv) {
     struct timespec start, end;
     int i, size = 1000000, numPages = 16;
     long elapsedTime;
-    float *timeArrayStop, *dif;
-
 
     int jump = PAGE_SIZE / sizeof(int); //1k int
 
@@ -56,5 +54,8 @@ int main(int argc, char **argv) {
     unsigned long diff = (end.tv_sec - start.tv_sec) * 1000000000 + end.tv_nsec - start.tv_nsec - loop;
     unsigned long aver = (diff / numPages) / size;
     printf("%d,%lu\n", numPages, aver);
+
+    free(a);
+
     return 0;
 }
