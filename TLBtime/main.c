@@ -12,7 +12,7 @@
 int main(int argc, char **argv) {
 
     struct timespec start, end;
-    int i, size = 10000000, numPages = 16;
+    int i, size = 10000, numPages = 16;
     long elapsedTime;
 
     int jump = PAGE_SIZE / sizeof(int); //1k int
