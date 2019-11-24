@@ -10,8 +10,6 @@ p) set -f # disable glob
 esac
 done
 
-
-
 echo "Number of arguments: ${#array[@]}"
 for i in "${array[@]}";
 do
