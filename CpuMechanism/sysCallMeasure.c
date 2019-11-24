@@ -15,13 +15,6 @@ long removeCalculatedOverHeadTime();
 
 //HOMEWORK: LIMITED DIRECT EXECUTION
 int main(int argc, char **argv) {
-   readAndUseClock_gettime();
-    return 0;
-}
-
-
-
-void readAndUseClock_gettime(){
     struct timespec start, end;
     long elapsedTime;
 
@@ -42,6 +35,8 @@ void readAndUseClock_gettime(){
     elapsedTime = (elapsedTime - start.tv_nsec) - removeCalculatedOverHeadTime();
 
     printf("time required for syscal %ld ns \n", (elapsedTime/1000));
+
+    return 0;
 }
 
 void performZeroByteRead(){

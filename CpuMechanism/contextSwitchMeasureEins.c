@@ -21,14 +21,14 @@ int main(int argc, char **argv) {
 }
 
 int createTwoPipesAndMeasureContextSwitch(){
-/*    cpu_set_t mask;
+    cpu_set_t mask;
     CPU_ZERO(&mask);
-    CPU_SET(__CHOSEN_CPU, &mask);
+    CPU_SET(0, &mask);
     if (sched_setaffinity(0, sizeof(cpu_set_t), &mask) < 0)
     {
         perror("ERROR: sched_setaffinity (main)\n");
         return EXIT_FAILURE;
-    }*/
+    }
 
     int pipe_data[2] = {0, 0};
     long messwerte[1000];
@@ -51,14 +51,14 @@ int createTwoPipesAndMeasureContextSwitch(){
     else if (pid == 0) // child
     {
         // Make sure this child process is also tied to one core only, i.e., the core that the parent is tied to
-        /*      cpu_set_t mask;
+              cpu_set_t mask;
               CPU_ZERO(&mask);
-              CPU_SET(__CHOSEN_CPU, &mask);
+              CPU_SET(0, &mask);
               if (sched_setaffinity(0, sizeof(cpu_set_t), &mask) < 0)
               {
                   perror("ERROR: sched_setaffinity (main)\n");
                   return EXIT_FAILURE;
-              }*/
+              }
 
         close(pipe_data[0]); // make it unidirectional (write only)
         struct timespec time_stop;
