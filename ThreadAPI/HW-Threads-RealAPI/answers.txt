@@ -1,0 +1,42 @@
+1. Data race durch Helgrind anerkannt.
+
+==1683== Helgrind, a thread error detector
+==1683== Copyright (C) 2007-2017, and GNU GPL'd, by OpenWorks LLP et al.
+==1683== Using Valgrind-3.16.0.GIT and LibVEX; rerun with -h for copyright info
+==1683== Command: ./main-race
+==1683==
+--1683-- UNKNOWN fcntl 101!
+--1683-- UNKNOWN fcntl 101! (repeated 2 times)
+--1683-- UNKNOWN fcntl 101! (repeated 4 times)
+--1683-- UNKNOWN fcntl 101! (repeated 8 times)
+--1683-- UNKNOWN fcntl 101! (repeated 16 times)
+--1683-- UNKNOWN fcntl 101! (repeated 32 times)
+--1683-- UNKNOWN task message [id 8000, to mach_task_self(), reply 0x707]
+==1683== ---Thread-Announcement------------------------------------------
+==1683==
+==1683== Thread #2 was created
+==1683==    at 0x1005A9236: __bsdthread_create (in /usr/lib/system/libsystem_kernel.dylib)
+==1683==    by 0x10060BA06: _pthread_create (in /usr/lib/system/libsystem_pthread.dylib)
+==1683==    by 0x100000D0C: Pthread_create (in ./main-race)
+==1683==    by 0x100000E1C: main (in ./main-race)
+==1683==
+==1683== ---Thread-Announcement------------------------------------------
+==1683==
+==1683== Thread #1 is the program's root thread
+==1683==
+==1683== ----------------------------------------------------------------
+==1683==
+==1683== Possible data race during read of size 4 at 0x100002058 by thread #2
+==1683== Locks held: none
+==1683==    at 0x100000DDA: worker (in ./main-race)
+==1683==    by 0x10060AD35: _pthread_start (in /usr/lib/system/libsystem_pthread.dylib)
+==1683==    by 0x10060758E: thread_start (in /usr/lib/system/libsystem_pthread.dylib)
+==1683==
+==1683== This conflicts with a previous write of size 4 by thread #1
+==1683== Locks held: none
+==1683==    at 0x100000E2A: main (in ./main-race)
+==1683==  Address 0x100002058 is in a rw- mapped file ./main-race segment
+==1683==
+==1683== ----------------------------------------------------------------
+
+2.1 
