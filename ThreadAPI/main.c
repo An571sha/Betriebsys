@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <ntsid.h>
 #include <pthread.h>
 
 typedef struct { int a; int b; } myarg_t;
