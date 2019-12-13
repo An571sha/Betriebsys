@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/Users/animeshSharma/Betriebsys/lockBasedDataStructure/queueWithLinkedList.c
+/Users/animeshSharma/Betriebsys/lockBasedDataStructure/queueWithMutexLinkedList.c
 stdio.h
 -
 stdlib.h

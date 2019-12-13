@@ -78,7 +78,7 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/Users/animeshSharma/Betriebsys/lockBasedDataStructure/queueWithLinkedList.c">
+		<Unit filename="/Users/animeshSharma/Betriebsys/lockBasedDataStructure/queueWithMutexLinkedList.c">
 			<Option target="lockBasedDataStructure"/>
 		</Unit>
 		<Unit filename="/Users/animeshSharma/Betriebsys/lockBasedDataStructure/CMakeLists.txt">

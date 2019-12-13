@@ -57,27 +57,27 @@ include CMakeFiles/lockBasedDataStructure.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/lockBasedDataStructure.dir/flags.make
 
-CMakeFiles/lockBasedDataStructure.dir/queueWithLinkedList.c.o: CMakeFiles/lockBasedDataStructure.dir/flags.make
-CMakeFiles/lockBasedDataStructure.dir/queueWithLinkedList.c.o: ../queueWithLinkedList.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/animeshSharma/Betriebsys/lockBasedDataStructure/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/lockBasedDataStructure.dir/queueWithLinkedList.c.o"
-	/Library/Developer/CommandLineTools/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/lockBasedDataStructure.dir/queueWithLinkedList.c.o   -c /Users/animeshSharma/Betriebsys/lockBasedDataStructure/queueWithLinkedList.c
+CMakeFiles/lockBasedDataStructure.dir/queueWithMutexLinkedList.c.o: CMakeFiles/lockBasedDataStructure.dir/flags.make
+CMakeFiles/lockBasedDataStructure.dir/queueWithMutexLinkedList.c.o: ../queueWithMutexLinkedList.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/animeshSharma/Betriebsys/lockBasedDataStructure/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/lockBasedDataStructure.dir/queueWithMutexLinkedList.c.o"
+	/Library/Developer/CommandLineTools/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/lockBasedDataStructure.dir/queueWithMutexLinkedList.c.o   -c /Users/animeshSharma/Betriebsys/lockBasedDataStructure/queueWithMutexLinkedList.c
 
-CMakeFiles/lockBasedDataStructure.dir/queueWithLinkedList.c.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/lockBasedDataStructure.dir/queueWithLinkedList.c.i"
-	/Library/Developer/CommandLineTools/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/animeshSharma/Betriebsys/lockBasedDataStructure/queueWithLinkedList.c > CMakeFiles/lockBasedDataStructure.dir/queueWithLinkedList.c.i
+CMakeFiles/lockBasedDataStructure.dir/queueWithMutexLinkedList.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/lockBasedDataStructure.dir/queueWithMutexLinkedList.c.i"
+	/Library/Developer/CommandLineTools/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /Users/animeshSharma/Betriebsys/lockBasedDataStructure/queueWithMutexLinkedList.c > CMakeFiles/lockBasedDataStructure.dir/queueWithMutexLinkedList.c.i
 
-CMakeFiles/lockBasedDataStructure.dir/queueWithLinkedList.c.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/lockBasedDataStructure.dir/queueWithLinkedList.c.s"
-	/Library/Developer/CommandLineTools/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/animeshSharma/Betriebsys/lockBasedDataStructure/queueWithLinkedList.c -o CMakeFiles/lockBasedDataStructure.dir/queueWithLinkedList.c.s
+CMakeFiles/lockBasedDataStructure.dir/queueWithMutexLinkedList.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/lockBasedDataStructure.dir/queueWithMutexLinkedList.c.s"
+	/Library/Developer/CommandLineTools/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /Users/animeshSharma/Betriebsys/lockBasedDataStructure/queueWithMutexLinkedList.c -o CMakeFiles/lockBasedDataStructure.dir/queueWithMutexLinkedList.c.s
 
 # Object files for target lockBasedDataStructure
 lockBasedDataStructure_OBJECTS = \
-"CMakeFiles/lockBasedDataStructure.dir/queueWithLinkedList.c.o"
+"CMakeFiles/lockBasedDataStructure.dir/queueWithMutexLinkedList.c.o"
 
 # External object files for target lockBasedDataStructure
 lockBasedDataStructure_EXTERNAL_OBJECTS =
 
-lockBasedDataStructure: CMakeFiles/lockBasedDataStructure.dir/queueWithLinkedList.c.o
+lockBasedDataStructure: CMakeFiles/lockBasedDataStructure.dir/queueWithMutexLinkedList.c.o
 lockBasedDataStructure: CMakeFiles/lockBasedDataStructure.dir/build.make
 lockBasedDataStructure: CMakeFiles/lockBasedDataStructure.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/animeshSharma/Betriebsys/lockBasedDataStructure/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking C executable lockBasedDataStructure"

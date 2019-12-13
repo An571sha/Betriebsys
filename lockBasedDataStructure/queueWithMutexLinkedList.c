@@ -18,6 +18,7 @@ typedef struct queue_t{
 
     node_t *head;
     node_t *tail;
+    pthread_mutex_t head_lock, tail_lock;
 
 } queue_t;
 
@@ -26,6 +27,8 @@ void int_queue(queue_t *t){
     node_t *temp = malloc(sizeof(node_t));
     temp->next = NULL;
     t->head = t->tail = NULL;
+    pthread_mutex_init(&t -> head_lock, NULL);
+    pthread_mutex_init(&t -> tail_lock, NULL);
 }
 
 void enque(queue_t *t, int value){
@@ -37,27 +40,64 @@ void enque(queue_t *t, int value){
     temp->next = NULL;
 
     if(t->tail == NULL) {
+
+        pthread_mutex_lock(&t -> head_lock);
+        pthread_mutex_lock(&t -> tail_lock);
+
         t->head = t->tail = temp;
+        pthread_mutex_unlock(&t -> head_lock);
+        pthread_mutex_unlock(&t -> tail_lock);
         return;
     }
 
+    pthread_mutex_lock(&t -> tail_lock);
     t->tail->next = temp;
     t->tail = temp;
+    pthread_mutex_unlock(&t -> tail_lock);
+
 }
 
 int dequeWithValue(queue_t *t, int *value) {
-
+    pthread_mutex_lock(&t -> head_lock);
     node_t *temp = t->head;
     node_t *new_head = temp->next;
 
     if(new_head == NULL){
+        pthread_mutex_unlock(&t -> head_lock);
         return -1;
     }
 
     *value = new_head->value;
     t->head = new_head;
+    pthread_mutex_unlock(&t -> head_lock);
     free(temp);
     return 0;
+}
+
+int deque(queue_t *t){
+    pthread_mutex_lock(&t -> head_lock);
+    node_t *temp = t->head;
+
+    if(t->head == NULL) {
+        pthread_mutex_unlock(&t -> head_lock);
+        return -1;
+    }
+
+    if(t->head == t->tail) {
+        pthread_mutex_lock(&t -> tail_lock);
+        t->head = t->tail = NULL;
+        pthread_mutex_unlock(&t -> head_lock);
+        pthread_mutex_unlock(&t -> tail_lock);
+
+    } else {
+        t->head = t->head->next;
+        pthread_mutex_unlock(&t -> head_lock);
+
+    }
+
+    free(temp);
+    return 0;
+
 }
 
 void printQueue(queue_t *t){
@@ -70,27 +110,6 @@ void printQueue(queue_t *t){
         tmp = tmp->next;
     }
     free(tmp);
-}
-
-int deque(queue_t *t){
-
-    node_t *temp = t->head;
-
-    if(t->head == NULL) {
-        return -1;
-    }
-
-    if(t->head == t->tail) {
-        t->head = t->tail = NULL;
-
-    } else {
-        t->head = t->head->next;
-
-    }
-
-    free(temp);
-    return 0;
-
 }
 
 int main() {

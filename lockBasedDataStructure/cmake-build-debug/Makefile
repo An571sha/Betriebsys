@@ -123,32 +123,32 @@ lockBasedDataStructure/fast:
 	$(MAKE) -f CMakeFiles/lockBasedDataStructure.dir/build.make CMakeFiles/lockBasedDataStructure.dir/build
 .PHONY : lockBasedDataStructure/fast
 
-queueWithLinkedList.o: queueWithLinkedList.c.o
+queueWithMutexLinkedList.o: queueWithMutexLinkedList.c.o
 
-.PHONY : queueWithLinkedList.o
+.PHONY : queueWithMutexLinkedList.o
 
 # target to build an object file
-queueWithLinkedList.c.o:
-	$(MAKE) -f CMakeFiles/lockBasedDataStructure.dir/build.make CMakeFiles/lockBasedDataStructure.dir/queueWithLinkedList.c.o
-.PHONY : queueWithLinkedList.c.o
+queueWithMutexLinkedList.c.o:
+	$(MAKE) -f CMakeFiles/lockBasedDataStructure.dir/build.make CMakeFiles/lockBasedDataStructure.dir/queueWithMutexLinkedList.c.o
+.PHONY : queueWithMutexLinkedList.c.o
 
-queueWithLinkedList.i: queueWithLinkedList.c.i
+queueWithMutexLinkedList.i: queueWithMutexLinkedList.c.i
 
-.PHONY : queueWithLinkedList.i
+.PHONY : queueWithMutexLinkedList.i
 
 # target to preprocess a source file
-queueWithLinkedList.c.i:
-	$(MAKE) -f CMakeFiles/lockBasedDataStructure.dir/build.make CMakeFiles/lockBasedDataStructure.dir/queueWithLinkedList.c.i
-.PHONY : queueWithLinkedList.c.i
+queueWithMutexLinkedList.c.i:
+	$(MAKE) -f CMakeFiles/lockBasedDataStructure.dir/build.make CMakeFiles/lockBasedDataStructure.dir/queueWithMutexLinkedList.c.i
+.PHONY : queueWithMutexLinkedList.c.i
 
-queueWithLinkedList.s: queueWithLinkedList.c.s
+queueWithMutexLinkedList.s: queueWithMutexLinkedList.c.s
 
-.PHONY : queueWithLinkedList.s
+.PHONY : queueWithMutexLinkedList.s
 
 # target to generate assembly for a file
-queueWithLinkedList.c.s:
-	$(MAKE) -f CMakeFiles/lockBasedDataStructure.dir/build.make CMakeFiles/lockBasedDataStructure.dir/queueWithLinkedList.c.s
-.PHONY : queueWithLinkedList.c.s
+queueWithMutexLinkedList.c.s:
+	$(MAKE) -f CMakeFiles/lockBasedDataStructure.dir/build.make CMakeFiles/lockBasedDataStructure.dir/queueWithMutexLinkedList.c.s
+.PHONY : queueWithMutexLinkedList.c.s
 
 # Help Target
 help:
@@ -159,9 +159,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... lockBasedDataStructure"
-	@echo "... queueWithLinkedList.o"
-	@echo "... queueWithLinkedList.i"
-	@echo "... queueWithLinkedList.s"
+	@echo "... queueWithMutexLinkedList.o"
+	@echo "... queueWithMutexLinkedList.i"
+	@echo "... queueWithMutexLinkedList.s"
 .PHONY : help
 
 
