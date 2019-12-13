@@ -38,7 +38,6 @@ void enque(queue_t *t, int value){
 
     temp->value = value;
     temp->next = NULL;
-
     if(t->tail == NULL) {
 
         pthread_mutex_lock(&t -> head_lock);

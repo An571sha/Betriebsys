@@ -76,7 +76,7 @@ void printQueue(queue_t *t){
 }
 
 int deque(queue_t *t){
-    
+
     node_t *temp = t->head;
 
     if(t->head == NULL) {
