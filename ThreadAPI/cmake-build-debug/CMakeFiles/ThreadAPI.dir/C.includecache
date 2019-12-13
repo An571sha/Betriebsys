@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/animeshSharma/Betriebsys/ThreadAPI/main.c
+stdio.h
+-
+stdlib.h
+-
+ntsid.h
+-
+pthread.h
+-
+

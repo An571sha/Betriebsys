@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/animeshSharma/Betriebsys/lockBasedDataStructure/queueWithLinkedList.c
+stdio.h
+-
+stdlib.h
+-
+pthread.h
+-
+assert.h
+-
+

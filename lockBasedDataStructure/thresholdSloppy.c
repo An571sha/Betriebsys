@@ -2,7 +2,7 @@
 #include <pthread.h>
 #include "mythreads.h"
 
-#define NUMCPUS 4
+#define NUMCPUS 2
 
 typedef struct counter_t{
 
@@ -47,14 +47,10 @@ int get(counter_t *c){
 }
 
 void* worker(counter_t *c, int threadID, int amt){
-    int j = 0;
     printf("%s %d \n", "Starting thread", threadID);
-
-    for(j = 0; j < 1000000; j++) {
-        update(c,threadID, amt);
-    }
+    update(c,threadID, amt);
     printf("%s %d \n", "Done with thread", threadID);
-    return NULL;
+    return (void *) NULL;
 
 }
 
@@ -63,14 +59,14 @@ int main() {
     pthread_t p0,p1,p2,p3,p4,p5;
     counter_t counter;
     init(&counter, 100);
-    Pthread_create(&p0, NULL, worker(&counter,0,1),NULL);
-    Pthread_create(&p1, NULL, worker(&counter,1,1),NULL);
-    Pthread_create(&p2, NULL, worker(&counter,2,1),NULL);
-    Pthread_create(&p3, NULL, worker(&counter,3,1),NULL);
-    Pthread_create(&p4, NULL, worker(&counter,4,1),NULL);
-    Pthread_create(&p5, NULL, worker(&counter,5,1),NULL);
+    pthread_create(&p0, NULL, worker(&counter,0,1),NULL);
+    pthread_create(&p1, NULL, worker(&counter,1,1),NULL);
+    pthread_create(&p2, NULL, worker(&counter,2,1),NULL);
+    pthread_create(&p3, NULL, worker(&counter,3,1),NULL);
+    pthread_create(&p4, NULL, worker(&counter,4,1),NULL);
+    pthread_create(&p5, NULL, worker(&counter,5,1),NULL);
     printf("%s,%d", "Global Counter = ",get(&counter));
-    Pthread_join(p0,NULL);
+    pthread_join(p0,NULL);
     printf("%s,%d", "Global Counter = ",get(&counter));
     Pthread_join(p1,NULL);
     Pthread_join(p2,NULL);
