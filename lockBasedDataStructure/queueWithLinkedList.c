@@ -21,28 +21,31 @@ typedef struct queue_t{
 
 } queue_t;
 
+node_t *temp1;
+node_t *temp2;
+
 void int_queue(queue_t *t){
 
-    node_t *temp = malloc(sizeof(node_t));
-    temp->next = NULL;
+    temp1 = malloc(sizeof(node_t));
+    temp1->next = NULL;
     t->head = t->tail = NULL;
 }
 
 void enque(queue_t *t, int value){
 
-    node_t *temp = malloc(sizeof(node_t));
-    assert(temp !=NULL);
+     temp2 = malloc(sizeof(node_t));
+    assert(temp2 != NULL);
 
-    temp->value = value;
-    temp->next = NULL;
+    temp2->value = value;
+    temp2->next = NULL;
 
     if(t->tail == NULL) {
-        t->head = t->tail = temp;
+        t->head = t->tail = temp2;
         return;
     }
 
-    t->tail->next = temp;
-    t->tail = temp;
+    t->tail->next = temp2;
+    t->tail = temp2;
 }
 
 int dequeWithValue(queue_t *t, int *value) {
@@ -103,5 +106,7 @@ int main() {
     enque(&t,40);
     deque(&t);
     printQueue(&t);
+    free(temp1);
+    free(temp2);
 
 }

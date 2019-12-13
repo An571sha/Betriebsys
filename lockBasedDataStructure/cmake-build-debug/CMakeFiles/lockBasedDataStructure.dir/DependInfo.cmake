@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_C
-  "/Users/animeshSharma/Betriebsys/lockBasedDataStructure/queueWithMutexLinkedList.c" "/Users/animeshSharma/Betriebsys/lockBasedDataStructure/cmake-build-debug/CMakeFiles/lockBasedDataStructure.dir/queueWithMutexLinkedList.c.o"
+  "/Users/animeshSharma/Betriebsys/lockBasedDataStructure/queueWithLinkedList.c" "/Users/animeshSharma/Betriebsys/lockBasedDataStructure/cmake-build-debug/CMakeFiles/lockBasedDataStructure.dir/queueWithLinkedList.c.o"
   )
 set(CMAKE_C_COMPILER_ID "AppleClang")
 
