@@ -1,5 +1,5 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/lockBasedDataStructure.dir/queueWithLinkedList.c.o"
+  "CMakeFiles/lockBasedDataStructure.dir/thresholdSloppy.c.o"
   "lockBasedDataStructure"
   "lockBasedDataStructure.pdb"
 )

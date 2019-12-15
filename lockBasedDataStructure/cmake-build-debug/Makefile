@@ -123,32 +123,32 @@ lockBasedDataStructure/fast:
 	$(MAKE) -f CMakeFiles/lockBasedDataStructure.dir/build.make CMakeFiles/lockBasedDataStructure.dir/build
 .PHONY : lockBasedDataStructure/fast
 
-queueWithLinkedList.o: queueWithLinkedList.c.o
+thresholdSloppy.o: thresholdSloppy.c.o
 
-.PHONY : queueWithLinkedList.o
+.PHONY : thresholdSloppy.o
 
 # target to build an object file
-queueWithLinkedList.c.o:
-	$(MAKE) -f CMakeFiles/lockBasedDataStructure.dir/build.make CMakeFiles/lockBasedDataStructure.dir/queueWithLinkedList.c.o
-.PHONY : queueWithLinkedList.c.o
+thresholdSloppy.c.o:
+	$(MAKE) -f CMakeFiles/lockBasedDataStructure.dir/build.make CMakeFiles/lockBasedDataStructure.dir/thresholdSloppy.c.o
+.PHONY : thresholdSloppy.c.o
 
-queueWithLinkedList.i: queueWithLinkedList.c.i
+thresholdSloppy.i: thresholdSloppy.c.i
 
-.PHONY : queueWithLinkedList.i
+.PHONY : thresholdSloppy.i
 
 # target to preprocess a source file
-queueWithLinkedList.c.i:
-	$(MAKE) -f CMakeFiles/lockBasedDataStructure.dir/build.make CMakeFiles/lockBasedDataStructure.dir/queueWithLinkedList.c.i
-.PHONY : queueWithLinkedList.c.i
+thresholdSloppy.c.i:
+	$(MAKE) -f CMakeFiles/lockBasedDataStructure.dir/build.make CMakeFiles/lockBasedDataStructure.dir/thresholdSloppy.c.i
+.PHONY : thresholdSloppy.c.i
 
-queueWithLinkedList.s: queueWithLinkedList.c.s
+thresholdSloppy.s: thresholdSloppy.c.s
 
-.PHONY : queueWithLinkedList.s
+.PHONY : thresholdSloppy.s
 
 # target to generate assembly for a file
-queueWithLinkedList.c.s:
-	$(MAKE) -f CMakeFiles/lockBasedDataStructure.dir/build.make CMakeFiles/lockBasedDataStructure.dir/queueWithLinkedList.c.s
-.PHONY : queueWithLinkedList.c.s
+thresholdSloppy.c.s:
+	$(MAKE) -f CMakeFiles/lockBasedDataStructure.dir/build.make CMakeFiles/lockBasedDataStructure.dir/thresholdSloppy.c.s
+.PHONY : thresholdSloppy.c.s
 
 # Help Target
 help:
@@ -159,9 +159,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... lockBasedDataStructure"
-	@echo "... queueWithLinkedList.o"
-	@echo "... queueWithLinkedList.i"
-	@echo "... queueWithLinkedList.s"
+	@echo "... thresholdSloppy.o"
+	@echo "... thresholdSloppy.i"
+	@echo "... thresholdSloppy.s"
 .PHONY : help
 
 
