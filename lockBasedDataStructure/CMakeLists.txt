@@ -3,4 +3,4 @@ project(lockBasedDataStructure C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(lockBasedDataStructure thresholdSloppy.c)
+add_executable(lockBasedDataStructure simpleConCounter.c)

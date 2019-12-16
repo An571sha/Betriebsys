@@ -3,6 +3,7 @@
 #include "mythreads.h"
 
 #define NUMCPUS 5
+#define ITERATIONS 1000
 
 typedef struct counter_t{
 
@@ -39,7 +40,7 @@ void update(counter_t *c , int threadID, int amt) {
     Pthread_mutex_lock(&c -> glock[threadID]);
     c -> local[threadID] += amt;
 
-    if( c -> local[threadID] >= c-> threshold){
+    if(c -> local[threadID] >= c-> threshold){
         Pthread_mutex_lock(&c->globalLock);
         c->global += c->local[threadID];
         Pthread_mutex_unlock(&c->globalLock);
@@ -57,9 +58,9 @@ int get(counter_t *c){
 
 void* worker(void *arg){
     cthread * ct = (cthread *) arg;
-    printf("%s %d \n", "Starting thread", ct->threadID);
-    update(ct->counter,ct->threadID, ct->amt);
-    printf("%s %d \n", "Done with thread", ct->threadID);
+    for (int i=0; i < ITERATIONS; i++) {
+        update(ct->counter, ct->threadID, ct->amt);
+    }
     return (void *) NULL;
 
 }
@@ -93,6 +94,11 @@ int main() {
 
     init(&counter, 100);
 
+    struct timespec time_start,time_stop;
+    long sum = 0;
+
+    clock_gettime(CLOCK_MONOTONIC_RAW, &time_start);
+
     pthread_create(&p0, NULL, worker,&cp0);
     pthread_create(&p1, NULL, worker,&cp1);
     pthread_create(&p2, NULL, worker,&cp2);
@@ -103,6 +109,22 @@ int main() {
     Pthread_join(p2,NULL);
     Pthread_join(p3,NULL);
     Pthread_join(p4,NULL);
+
+    clock_gettime(CLOCK_MONOTONIC_RAW, &time_stop);
+
+    sum = time_stop.tv_nsec;
+
+    if (time_start.tv_nsec > time_stop.tv_nsec) {
+        sum += ((long) time_stop.tv_sec - (long) time_start.tv_sec) * 1000000000;
+    }
+
+    sum = (sum - time_start.tv_nsec);
+
+    printf("time taken %ld ns\n", sum / ITERATIONS);
+
+    printf("%s %d \n", "counter value", get(cp4.counter));
+
+
     return 0;
 }
 

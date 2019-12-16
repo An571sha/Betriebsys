@@ -72,6 +72,8 @@ int main() {
 
     Pthread_create(&p0, NULL, worker, &counter0);
     Pthread_create(&p1, NULL, worker, &counter1);
+    Pthread_join(p0,NULL);
+    Pthread_join(p1,NULL);
 
     clock_gettime(CLOCK_MONOTONIC_RAW, &time_stop);
 
@@ -85,8 +87,6 @@ int main() {
 
     printf("werte %ld ns\n", sum/10);
 
-    Pthread_join(p0,NULL);
-    Pthread_join(p1,NULL);
 
     return 0;
 
