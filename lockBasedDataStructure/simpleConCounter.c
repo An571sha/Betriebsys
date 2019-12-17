@@ -37,43 +37,40 @@ int get(counter_t *c) {
 }
 
 //updating with one or multiple threads
-//is for loop affected by interrputs, if yes, do i need to lock it?
+//is for loop affected by interrupts, if yes, do i need to lock it?
 void* worker(void *c){
-    for(int i=0; i<5; i++){
+    for(int i=0; i<100; i++){
         increment(c);
-    }
-
-    for(int i = 0; i<5; i++){
-        decrement(c);
     }
 
     return c;
 }
 
-void* print_char (void *arg) {
-    counter_t *c= (counter_t *)arg;
-    Pthread_mutex_lock(&c->lock);
-    printf("%c", c->value++);
-    Pthread_mutex_unlock(&c->lock);
-    return arg;
-}
 
 int main() {
-    pthread_t p0,p1;
+   pthread_t p0,p1,p2,p3,p4,p5;
 
-    counter_t counter0,counter1;
+    counter_t counter0,counter1,counter2,counter3,counter4,counter5;
     long sum = 0;
     struct timespec time_start,time_stop;
 
     init(&counter0);
     init(&counter1);
-    //measuring with one thread now
+
     clock_gettime(CLOCK_MONOTONIC_RAW, &time_start);
 
     Pthread_create(&p0, NULL, worker, &counter0);
     Pthread_create(&p1, NULL, worker, &counter1);
-    Pthread_join(p0,NULL);
-    Pthread_join(p1,NULL);
+   // Pthread_create(&p2, NULL, worker, &counter2);
+   // Pthread_create(&p3, NULL, worker, &counter3);
+  //  Pthread_create(&p4, NULL, worker, &counter4);
+  //  Pthread_create(&p5, NULL, worker, &counter5);
+    Pthread_join(p0, NULL);
+    Pthread_join(p1, NULL);
+  //  Pthread_join(p2, NULL);
+  //  Pthread_join(p3, NULL);
+  //  Pthread_join(p4, NULL);
+  //  Pthread_join(p5, NULL);*/
 
     clock_gettime(CLOCK_MONOTONIC_RAW, &time_stop);
 
@@ -86,7 +83,7 @@ int main() {
     sum = (sum - time_start.tv_nsec);
 
     printf("werte %ld ns\n", sum/10);
-
+    printf("incremented counter %d \n ", get(&counter1));
 
     return 0;
 

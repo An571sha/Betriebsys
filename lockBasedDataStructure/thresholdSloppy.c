@@ -3,7 +3,8 @@
 #include "mythreads.h"
 
 #define NUMCPUS 5
-#define ITERATIONS 1000
+#define ITERATIONS 1000000
+#define THRESHOLD 2
 
 typedef struct counter_t{
 
@@ -92,7 +93,7 @@ int main() {
     cp4.amt = 1;
 
 
-    init(&counter, 100);
+    init(&counter, THRESHOLD);
 
     struct timespec time_start,time_stop;
     long sum = 0;
@@ -120,7 +121,7 @@ int main() {
 
     sum = (sum - time_start.tv_nsec);
 
-    printf("time taken %ld ns\n", sum / ITERATIONS);
+    printf("time taken %ld ns\n", sum / (ITERATIONS));
 
     printf("%s %d \n", "counter value", get(cp4.counter));
 

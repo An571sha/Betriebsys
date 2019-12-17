@@ -22,6 +22,14 @@ typedef struct queue_t{
 
 } queue_t;
 
+typedef struct wert_t{
+
+    queue_t *q;
+    int i;
+    
+
+} wert_t;
+
 void int_queue(queue_t *t){
 
     node_t *temp = malloc(sizeof(node_t));
@@ -54,6 +62,12 @@ void enque(queue_t *t, int value){
     t->tail = temp;
     pthread_mutex_unlock(&t -> tail_lock);
 
+}
+
+void* worker(void *arg) {
+    wert_t *ct = (wert_t *) arg;
+    enque(ct->q,ct->i);
+    return (void *) NULL;
 }
 
 int dequeWithValue(queue_t *t, int *value) {
@@ -114,12 +128,62 @@ void printQueue(queue_t *t){
 int main() {
 
     queue_t t;
+    wert_t wert0,wert1,wert2,wert3;
+    pthread_t p0,p1,p2,p3,p4;
+
+
+
+    wert0.q = &t;
+    wert0.i = 10;
+
+    wert1.q = &t;
+    wert1.i = 20;
+
+    wert2.q = &t;
+    wert2.i = 30;
+
+    wert3.q = &t;
+    wert3.i = 40;
+
+
     int_queue(&t);
+    long sum = 0;
+    struct timespec time_start,time_stop;
+
+    clock_gettime(CLOCK_MONOTONIC_RAW, &time_start);
+
+    pthread_create(&p0, NULL, worker, &wert0);
+    pthread_create(&p1, NULL, worker, &wert1);
+    pthread_create(&p2, NULL, worker, &wert2);
+    pthread_create(&p3, NULL, worker, &wert3);
+    pthread_join(p0,NULL);
+    pthread_join(p1,NULL);
+    pthread_join(p2,NULL);
+    pthread_join(p3,NULL);
+
+
+/*
     enque(&t,10);
     enque(&t,20);
     enque(&t,30);
     enque(&t,40);
     deque(&t);
+*/
+
+
+    clock_gettime(CLOCK_MONOTONIC_RAW, &time_stop);
+
+    sum = time_stop.tv_nsec;
+
+    if (time_start.tv_nsec > time_stop.tv_nsec) {
+        sum += ((long) time_stop.tv_sec - (long) time_start.tv_sec) * 1000000000;
+    }
+
+    sum = (sum - time_start.tv_nsec);
+
     printQueue(&t);
+
+    printf("Time Taken %ld ns\n", sum);
+
 
 }
