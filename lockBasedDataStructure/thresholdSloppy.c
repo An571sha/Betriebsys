@@ -4,7 +4,7 @@
 
 #define NUMCPUS 5
 #define ITERATIONS 1000000
-#define THRESHOLD 2
+#define THRESHOLD 1024
 
 typedef struct counter_t{
 
@@ -121,7 +121,9 @@ int main() {
 
     sum = (sum - time_start.tv_nsec);
 
-    printf("time taken %ld ns\n", sum / (ITERATIONS));
+    double time = (double)sum/100000000;
+
+    printf("time taken %f s\n", time);
 
     printf("%s %d \n", "counter value", get(cp4.counter));
 

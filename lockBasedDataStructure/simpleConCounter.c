@@ -56,18 +56,22 @@ int main() {
 
     init(&counter0);
     init(&counter1);
+    init(&counter2);
+    init(&counter3);
+    init(&counter4);
+    init(&counter5);
 
     clock_gettime(CLOCK_MONOTONIC_RAW, &time_start);
 
     Pthread_create(&p0, NULL, worker, &counter0);
     Pthread_create(&p1, NULL, worker, &counter1);
-   // Pthread_create(&p2, NULL, worker, &counter2);
+    Pthread_create(&p2, NULL, worker, &counter2);
    // Pthread_create(&p3, NULL, worker, &counter3);
   //  Pthread_create(&p4, NULL, worker, &counter4);
   //  Pthread_create(&p5, NULL, worker, &counter5);
     Pthread_join(p0, NULL);
     Pthread_join(p1, NULL);
-  //  Pthread_join(p2, NULL);
+    Pthread_join(p2, NULL);
   //  Pthread_join(p3, NULL);
   //  Pthread_join(p4, NULL);
   //  Pthread_join(p5, NULL);*/
