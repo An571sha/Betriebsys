@@ -8,27 +8,32 @@ int buffer[MAX];
 int fill = 0;
 int use = 0;
 int counter = 0;
+int tmp = 0;
 sem_t full;
 sem_t empty;
 sem_t mutex;
 
-typedef struct wert_t{
+typedef struct wert{
     int i;
+
 } wert;
 
+/** How can i use a @counter variable mentioned in the previous chapter with MUTEX here, i can't seem to figure it out. **/
 
 void put(int value) {
     buffer[fill] = value;
     fill = (fill + 1) % MAX;
-    printf("fill - %d\n", fill);
     counter++;
+    printf("fill - %d\n", fill);
+    printf("counter - %d\n", counter);
 }
 
 int get() {
-    int tmp = buffer[use];
+    tmp = buffer[use];
     use = (use + 1) % MAX;
-    printf("use - %d\n", use);
     counter--;
+    printf("use - %d\n", use);
+    printf("counter - %d\n", counter);
     return tmp;
 }
 
@@ -46,7 +51,6 @@ void producer(int loops){
 }
 
 void consumer(int loops){
-    int tmp = 0;
     for (int i = 0; i < loops; i++) {
         sem_wait(&full);
         sem_wait(&mutex);
@@ -74,8 +78,13 @@ int main() {
     sem_init(&empty, 0, MAX);
     sem_init(&full, 0, 0);
 
-    pthread_create(&p0, NULL, worker, &t1);
-    pthread_create(&p1, NULL, worker, &t2);
+   // producer(10);
+   // consumer(10);
+
+     pthread_create(&p0, NULL, worker, &t1);
+     pthread_create(&p1, NULL, worker, &t2);
+     pthread_join(p0,NULL);
+     pthread_join(p1,NULL);
 
     return 0;
 }
