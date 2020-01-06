@@ -1,34 +1,63 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include "common_threads.h"
+#include <pthread.h>
+#include <assert.h>
+#include <semaphore.h>
 
 //
 // Your code goes in the structure and functions below
 //
 
 typedef struct __rwlock_t {
+    sem_t readlock;
+    sem_t writelock;
+    sem_t noStarvelock;
+    int readers;
+    int prevs;
 } rwlock_t;
 
 
 void rwlock_init(rwlock_t *rw) {
+    rw-> readers = 0;
+    rw-> prevs = 0;
+    sem_init(&rw -> readlock, 0 ,1);
+    sem_init(&rw -> writelock, 0 ,1);
 }
 
 void rwlock_acquire_readlock(rwlock_t *rw) {
+    sem_wait(&rw->noStarvelock);
+    sem_post(&rw->noStarvelock);
+   // printf("starvations prevented - %d\n", rw -> prevs++);
+    sem_wait(&rw -> readlock);
+    rw -> readers++;
+    if(rw->readers == 1){
+        sem_wait(&rw->writelock);
+    }
+    sem_post(&rw -> readlock);
 }
 
 void rwlock_release_readlock(rwlock_t *rw) {
+    sem_wait(&rw -> readlock);
+    rw -> readers--;
+    if(rw->readers == 0){
+        sem_post(&rw->writelock);
+    }
+    sem_post(&rw -> readlock);
 }
 
 void rwlock_acquire_writelock(rwlock_t *rw) {
+    sem_wait(&rw->noStarvelock);
+    sem_wait(&rw->writelock);
 }
 
 void rwlock_release_writelock(rwlock_t *rw) {
+    sem_post(&rw->writelock);
+    sem_post(&rw->noStarvelock);
 }
 
 //
 // Don't change the code below (just use it!)
-// 
+//
 
 int loops;
 int value = 0;
@@ -38,9 +67,9 @@ rwlock_t lock;
 void *reader(void *arg) {
     int i;
     for (i = 0; i < loops; i++) {
-	rwlock_acquire_readlock(&lock);
-	printf("read %d\n", value);
-	rwlock_release_readlock(&lock);
+        rwlock_acquire_readlock(&lock);
+        printf("read %d\n", value);
+        rwlock_release_readlock(&lock);
     }
     return NULL;
 }
@@ -48,10 +77,10 @@ void *reader(void *arg) {
 void *writer(void *arg) {
     int i;
     for (i = 0; i < loops; i++) {
-	rwlock_acquire_writelock(&lock);
-	value++;
-	printf("write %d\n", value);
-	rwlock_release_writelock(&lock);
+        rwlock_acquire_writelock(&lock);
+        value++;
+        printf("write %d\n", value);
+        rwlock_release_writelock(&lock);
     }
     return NULL;
 }
@@ -70,14 +99,14 @@ int main(int argc, char *argv[]) {
 
     int i;
     for (i = 0; i < num_readers; i++)
-	Pthread_create(&pr[i], NULL, reader, NULL);
+        pthread_create(&pr[i], NULL, reader, NULL);
     for (i = 0; i < num_writers; i++)
-	Pthread_create(&pw[i], NULL, writer, NULL);
+        pthread_create(&pw[i], NULL, writer, NULL);
 
     for (i = 0; i < num_readers; i++)
-	Pthread_join(pr[i], NULL);
+        pthread_join(pr[i], NULL);
     for (i = 0; i < num_writers; i++)
-	Pthread_join(pw[i], NULL);
+        pthread_join(pw[i], NULL);
 
     printf("end: value %d\n", value);
 
